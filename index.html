@@ -1,150 +1,135 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deen Singh - Profile & Gallery</title>
+    <title>Deen Singh - My Gallery</title>
     <style>
-        /* Modern Background aur General Settings */
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            min-height: 100vh;
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            color: white; text-align: center;
         }
-
-        /* Profile Container Design */
-        .profile-container {
-            text-align: center;
+        .container {
             padding: 40px 20px;
+            margin: 40px auto; width: 90%; max-width: 600px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            margin: 30px auto;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-
         .profile-pic {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 4px solid #fff;
-            object-fit: cover;
-            margin-bottom: 15px;
-            background-color: #ddd;
+            width: 120px; height: 120px; border-radius: 50%;
+            border: 4px solid #4caf50; object-fit: cover; margin-bottom: 15px;
         }
-
-        .profile-container h1 {
-            margin: 10px 0;
-            font-size: 2.5em;
-        }
-
-        .profile-container p {
-            font-size: 1.2em;
-            color: #d1d8e0;
-            margin-bottom: 25px;
-        }
-
-        /* Upload Button Design */
-        .upload-btn-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
         .btn {
-            border: none;
-            color: white;
-            background-color: #ff4757;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+            background: #2ea44f; color: white; border: none;
+            padding: 12px 25px; border-radius: 8px; font-size: 16px;
+            cursor: pointer; font-weight: bold; margin-top: 10px;
         }
-
-        .btn:hover {
-            background-color: #ff6b81;
+        .btn:hover { background: #2c974b; }
+        .upload-wrapper { position: relative; display: inline-block; }
+        .upload-wrapper input[type=file] {
+            position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%;
         }
-
-        .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
+        #status { margin-top: 15px; font-weight: bold; color: #ffeb3b; }
+        .gallery {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px; padding: 20px; max-width: 1000px; margin: 0 auto;
         }
-
-        /* Gallery Grid Design (Kafi Storage dikhane ke liye) */
-        .gallery-container {
-            width: 90%;
-            margin: 0 auto 50px auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .gallery-item {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
+        .gallery img {
+            width: 100%; height: 200px; object-fit: cover; border-radius: 10px; border: 2px solid #fff;
         }
     </style>
 </head>
 <body>
 
-    <div class="profile-container">
-        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-pic">
+    <div class="container">
+        <img src="https://via.placeholder.com/120" alt="Deen Singh" class="profile-pic">
         
-        <h1>Deen Singh</h1>
-        <p>Journalist & Content Creator</p>
+        <h1>Deen Singh's Gallery</h1>
+        <p>यहाँ अपलोड की गई फोटो सीधे आपकी GitHub Repository में सेव होगी!</p>
         
-        <div class="upload-btn-wrapper">
-            <button class="btn">📸 Upload New Photo</button>
-            <input type="file" id="imageUpload" accept="image/*" />
+        <div class="upload-wrapper">
+            <button class="btn">📸 Select & Upload Photo</button>
+            <input type="file" id="imageInput" accept="image/*" />
         </div>
+        <div id="status"></div>
     </div>
 
-    <div class="gallery-container" id="photoGallery">
+    <div class="gallery" id="galleryContainer">
         </div>
 
     <script>
-        const imageUpload = document.getElementById('imageUpload');
-        const photoGallery = document.getElementById('photoGallery');
+        // ==========================================
+        // आपकी गिटहब डिटेल्स 
+        // ==========================================
+        const GITHUB_USERNAME = 'deensingh74-cyber'; 
+        const REPO_NAME = 'Deen-singh';             
+        const GITHUB_TOKEN = 'Ghp_ptcmYrzH7VpSC06OZ8RUtCSCi5mfwQ3vZDcK'; 
+        const FOLDER_NAME = 'gallery_photos';           
+        // ==========================================
 
-        imageUpload.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                
-                reader.addEventListener('load', function() {
-                    // Nayi photo ka HTML element banana
-                    const newImage = document.createElement('img');
-                    newImage.src = this.result;
-                    newImage.className = 'gallery-item';
+        const imageInput = document.getElementById('imageInput');
+        const statusText = document.getElementById('status');
+        const galleryContainer = document.getElementById('galleryContainer');
+
+        // जब पेज लोड हो, तो पुरानी फोटोज गिटहब से निकालकर दिखाना
+        async function loadExistingPhotos() {
+            try {
+                // टाइमस्टैम्प जोड़ रहे हैं ताकि पुरानी कैशे (Cache) फोटो न दिखे
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_NAME}?t=${Date.now()}`);
+                if(response.ok) {
+                    const files = await response.json();
                     
-                    // Photo ko gallery mein sabse aage add karna
-                    photoGallery.prepend(newImage);
-                });
-                
-                reader.readAsDataURL(file);
+                    // फाइल्स को गैलरी में दिखाना
+                    files.reverse().forEach(file => {
+                        if(file.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                            const imgElem = document.createElement('img');
+                            imgElem.src = file.download_url;
+                            galleryContainer.appendChild(imgElem);
+                        }
+                    });
+                }
+            } catch(e) {
+                console.log("अभी तक कोई फोटो नहीं है या फोल्डर नहीं बना है।");
             }
-        });
-    </script>
+        }
+        
+        loadExistingPhotos();
 
-</body>
-</html>
+        // नई फोटो अपलोड करने का कोड
+        imageInput.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            statusText.innerText = "⏳ अपलोड हो रहा है... कृपया प्रतीक्षा करें";
+            statusText.style.color = "#ffeb3b";
+
+            const fileName = `photo_${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+            const filePath = `${FOLDER_NAME}/${fileName}`;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = async function() {
+                const base64Content = reader.result.split(',')[1];
+
+                try {
+                    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${filePath}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: `Uploaded new photo: ${fileName}`,
+                            content: base64Content
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        statusText.innerText = "✅ फोटो सफलतापूर्वक GitHub पर सेव हो गई!";
+                        statusText
+                        
