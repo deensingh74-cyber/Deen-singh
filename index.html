@@ -433,7 +433,273 @@
                 <h3>भूगोल और सामान्य ज्ञान</h3>
                 <p>भारत और विश्व का भूगोल, नक़्शे (Maps), और बार-बार पूछे जाने वाले सामान्य ज्ञान के प्रश्न।</p>
                 <a href="geography-gk.html" class="btn">प्रश्न पढ़ें</a>
+            </div><!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Exam PYQ - आपकी सफलता का साथी</title>
+    <style>
+        /* बेसिक रिसेट */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* प्योर व्हाइट बैकग्राउंड */
+        body {
+            background-color: #ffffff; 
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        /* टॉप मेन्यू (Header) */
+        header {
+            background-color: #1a237e;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a:hover {
+            color: #ffc107;
+        }
+
+        /* हीरो सेक्शन (Banner) */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-bottom: 2px solid #eeeeee;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #555555;
+        }
+
+        /* ग्रिड सेक्शन (Container) */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 40px;
+            color: #222222;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        /* कार्ड डिज़ाइन */
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: #1a237e;
+        }
+
+        /* स्पेशल PDF कार्ड डिज़ाइन (लाल बॉर्डर के साथ) */
+        .pdf-card {
+            border-top: 4px solid #d32f2f;
+        }
+
+        .pdf-card:hover {
+            border-color: #d32f2f;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1a237e;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            margin-top: auto;
+        }
+
+        .btn:hover {
+            background-color: #3949ab;
+        }
+
+        .pdf-btn {
+            background-color: #d32f2f;
+        }
+
+        .pdf-btn:hover {
+            background-color: #b71c1c;
+        }
+
+        /* मोबाइल रिस्पॉन्सिवनेस */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- टॉप मेन्यू -->
+    <header>
+        <a href="#" class="logo">All Exam PYQ</a>
+        <ul class="nav-links">
+            <li><a href="#home">होम</a></li>
+            <li><a href="#pdfs">डायरेक्ट PDF</a></li>
+            <li><a href="#pyq">पुराने पेपर</a></li>
+            <li><a href="#jobs">नई भर्तियां</a></li>
+        </ul>
+    </header>
+
+    <!-- बैनर सेक्शन -->
+    <section class="hero" id="home">
+        <h1>आपकी सफलता का विश्वसनीय साथी</h1>
+        <p>प्रतियोगी परीक्षाओं के नोट्स, पुराने पेपर, ताज़ा भर्तियां और महत्वपूर्ण सिलेबस एक ही जगह पर।</p>
+    </section>
+
+    <div class="container">
+        
+        <!-- नया सेक्शन: आपके दिए गए डायरेक्ट PDF लिंक्स -->
+        <h2 class="section-title" id="pdfs">महत्वपूर्ण सिलेबस और स्टडी मटेरियल (PDF)</h2>
+        
+        <div class="grid">
+            <!-- 1. चतुर्थ श्रेणी सिलेबस -->
+            <div class="card pdf-card" onclick="window.open('https://drive.google.com/file/d/1LOz4Lue7t1cYCyMy-jlMVe3H05EzyWN8/view?usp=drivesdk', '_blank')">
+                <h3>चतुर्थ श्रेणी (Group D)</h3>
+                <p>चतुर्थ श्रेणी भर्ती परीक्षा का संपूर्ण और आधिकारिक सिलेबस यहाँ से डायरेक्ट पीडीएफ में देखें।</p>
+                <!-- बटन पर क्लिक करने से भी नए टैब में खुलेगा -->
+                <a href="https://drive.google.com/file/d/1LOz4Lue7t1cYCyMy-jlMVe3H05EzyWN8/view?usp=drivesdk" target="_blank" class="btn pdf-btn" onclick="event.stopPropagation();">PDF सिलेबस देखें</a>
             </div>
+
+            <!-- 2. सामान्य इंग्लिश -->
+            <div class="card pdf-card" onclick="window.open('https://drive.google.com/file/d/1RO5WGH3NU2zJecX81ftcEHAFAkPHRV9a/view?usp=drivesdk', '_blank')">
+                <h3>सामान्य इंग्लिश (General English)</h3>
+                <p>प्रतियोगी परीक्षाओं के लिए महत्वपूर्ण सामान्य अंग्रेजी के नोट्स और प्रैक्टिस मटेरियल की पीडीएफ।</p>
+                <a href="https://drive.google.com/file/d/1RO5WGH3NU2zJecX81ftcEHAFAkPHRV9a/view?usp=drivesdk" target="_blank" class="btn pdf-btn" onclick="event.stopPropagation();">PDF नोट्स पढ़ें</a>
+            </div>
+
+            <!-- 3. सामान्य गणित -->
+            <div class="card pdf-card" onclick="window.open('https://drive.google.com/file/d/1RMySgnuOhFqaBCfYNc4_TycB4TYbudoK/view?usp=drivesdk', '_blank')">
+                <h3>सामान्य गणित (General Math)</h3>
+                <p>सभी परीक्षाओं में काम आने वाले सामान्य गणित (Maths) के महत्वपूर्ण सूत्रों और सवालों की पीडीएफ।</p>
+                <a href="https://drive.google.com/file/d/1RMySgnuOhFqaBCfYNc4_TycB4TYbudoK/view?usp=drivesdk" target="_blank" class="btn pdf-btn" onclick="event.stopPropagation();">PDF नोट्स पढ़ें</a>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid #eeeeee; margin: 40px 0;">
+
+        <!-- पुराने 10 विषयों का ग्रिड -->
+        <h2 class="section-title" id="pyq">अन्य विषय और पुराने पेपर</h2>
+        
+        <div class="grid">
+            <div class="card" onclick="window.location.href='economics-pyq.html'">
+                <h3>अर्थशास्त्र (Economics)</h3>
+                <p>बी.ए. से लेकर एडवांस लेवल तक के कॉन्सेप्ट्स, थ्योरी और पिछले वर्षों के पेपर्स (PYQ)।</p>
+                <a href="economics-pyq.html" class="btn">पेपर्स देखें</a>
+            </div>
+
+            <div class="card" onclick="window.location.href='rajasthan-history.html'">
+                <h3>राजस्थान इतिहास व संस्कृति</h3>
+                <p>महान शूरवीरों, ऐतिहासिक किलों, वास्तुकला और लोक-देवताओं का संपूर्ण अध्ययन।</p>
+                <a href="rajasthan-history.html" class="btn">नोट्स पढ़ें</a>
+            </div>
+
+            <div class="card" onclick="window.location.href='indian-polity.html'">
+                <h3>संविधान और राजव्यवस्था</h3>
+                <p>संविधान के अनुच्छेद, कानून और राजनीतिक व्यवस्था के नोट्स व परीक्षा उपयोगी प्रश्न।</p>
+                <a href="indian-polity.html" class="btn">नोट्स पढ़ें</a>
+            </div>
+
+            <div class="card" onclick="window.location.href='latest-jobs.html'" id="jobs">
+                <h3>लेटेस्ट भर्तियां (Job Alerts)</h3>
+                <p>Agniveervayu, GDS, UPSC, RAS और अन्य सभी सरकारी नौकरियों के ताज़ा नोटिफिकेशन।</p>
+                <a href="latest-jobs.html" class="btn">भर्तियां चेक करें</a>
+            </div>
+            
+            <!-- वेबसाइट को ज़्यादा लंबा होने से बचाने के लिए मैंने यहाँ 4 विषय रखे हैं, आप चाहें तो अपने पहले वाले कोड से बाकी 6 विषय भी यहाँ नीचे पेस्ट कर सकते हैं -->
+        </div>
+
+    </div>
+
+</body>
+</html>
+            
 
             <!-- 5. हिंदी साहित्य -->
             <div class="card" onclick="window.location.href='hindi-sahitya.html'">
