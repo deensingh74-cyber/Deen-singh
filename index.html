@@ -218,3 +218,267 @@
     <a href="https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9I0J/view?usp=sharing" target="_blank" class="pdf-btn">PDF खोलें</a>
 </li>
 
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Exam PYQ - आपकी सफलता का साथी</title>
+    <style>
+        /* बेसिक रिसेट */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* प्योर व्हाइट बैकग्राउंड */
+        body {
+            background-color: #ffffff; 
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        /* टॉप मेन्यू (Header) */
+        header {
+            background-color: #1a237e; /* प्रोफेशनल डार्क ब्लू */
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a:hover {
+            color: #ffc107; /* पीला रंग */
+        }
+
+        /* हीरो सेक्शन (Banner) */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-bottom: 2px solid #eeeeee;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #555555;
+        }
+
+        /* विषयों का ग्रिड सेक्शन */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 40px;
+            color: #222222;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* कार्ड डिज़ाइन */
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: #1a237e;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 20px;
+            flex-grow: 1; /* टेक्स्ट कम ज़्यादा होने पर भी बटन बराबर लाइन में रहेंगे */
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #1a237e;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background 0.3s ease;
+            margin-top: auto;
+        }
+
+        .btn:hover {
+            background-color: #3949ab;
+        }
+
+        /* मोबाइल रिस्पॉन्सिवनेस */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- टॉप मेन्यू -->
+    <header>
+        <a href="#" class="logo">All Exam PYQ</a>
+        <ul class="nav-links">
+            <li><a href="#home">होम</a></li>
+            <li><a href="#pyq">पुराने पेपर</a></li>
+            <li><a href="#notes">स्टडी मटेरियल</a></li>
+            <li><a href="#jobs">नई भर्तियां (Jobs)</a></li>
+            <li><a href="#about">हमारे बारे में</a></li>
+        </ul>
+    </header>
+
+    <!-- बैनर सेक्शन -->
+    <section class="hero" id="home">
+        <h1>आपकी सफलता का विश्वसनीय साथी</h1>
+        <p>प्रतियोगी परीक्षाओं के नोट्स, पुराने पेपर, ताज़ा भर्तियां और बेहतरीन स्किल्स एक ही जगह पर।</p>
+    </section>
+
+    <!-- सभी 10 विषयों का ग्रिड -->
+    <div class="container">
+        <h2 class="section-title">हमारे मुख्य विषय और अलर्ट्स</h2>
+        
+        <div class="grid">
+            
+            <!-- 1. अर्थशास्त्र -->
+            <div class="card" onclick="window.location.href='economics-pyq.html'">
+                <h3>अर्थशास्त्र (Economics)</h3>
+                <p>बी.ए. से लेकर एडवांस लेवल तक के कॉन्सेप्ट्स, थ्योरी और पिछले वर्षों के पेपर्स (PYQ)।</p>
+                <a href="economics-pyq.html" class="btn">पेपर्स देखें</a>
+            </div>
+
+            <!-- 2. राजस्थान इतिहास -->
+            <div class="card" onclick="window.location.href='rajasthan-history.html'">
+                <h3>राजस्थान इतिहास व संस्कृति</h3>
+                <p>महान शूरवीरों, ऐतिहासिक किलों, वास्तुकला और लोक-देवताओं का संपूर्ण अध्ययन।</p>
+                <a href="rajasthan-history.html" class="btn">नोट्स पढ़ें</a>
+            </div>
+
+            <!-- 3. भारतीय संविधान -->
+            <div class="card" onclick="window.location.href='indian-polity.html'">
+                <h3>संविधान और राजव्यवस्था</h3>
+                <p>संविधान के अनुच्छेद, कानून और राजनीतिक व्यवस्था के नोट्स व परीक्षा उपयोगी प्रश्न।</p>
+                <a href="indian-polity.html" class="btn">नोट्स पढ़ें</a>
+            </div>
+
+            <!-- 4. भूगोल -->
+            <div class="card" onclick="window.location.href='geography-gk.html'">
+                <h3>भूगोल और सामान्य ज्ञान</h3>
+                <p>भारत और विश्व का भूगोल, नक़्शे (Maps), और बार-बार पूछे जाने वाले सामान्य ज्ञान के प्रश्न।</p>
+                <a href="geography-gk.html" class="btn">प्रश्न पढ़ें</a>
+            </div>
+
+            <!-- 5. हिंदी साहित्य -->
+            <div class="card" onclick="window.location.href='hindi-sahitya.html'">
+                <h3>हिंदी साहित्य</h3>
+                <p>प्रमुख उपन्यासों ('गोदान', 'गुनाहों का देवता' आदि), कहानियों और कविताओं की समीक्षा व प्रश्नोत्तर।</p>
+                <a href="hindi-sahitya.html" class="btn">साहित्य पढ़ें</a>
+            </div>
+
+            <!-- 6. राजस्थानी भाषा -->
+            <div class="card" onclick="window.location.href='rajasthani-language.html'">
+                <h3>राजस्थानी और मारवाड़ी भाषा</h3>
+                <p>स्थानीय भाषा का संरक्षण, हिंदी से मारवाड़ी अनुवाद, और राजस्थानी लोक-साहित्य के लेख।</p>
+                <a href="rajasthani-language.html" class="btn">लेख पढ़ें</a>
+            </div>
+
+            <!-- 7. समसामयिकी -->
+            <div class="card" onclick="window.location.href='current-affairs.html'">
+                <h3>समसामयिकी (Current Affairs)</h3>
+                <p>देश-दुनिया की रोज़ाना की ताज़ा ख़बरें, जर्नलिज्म आर्टिकल्स और अहम मुद्दों का विश्लेषण।</p>
+                <a href="current-affairs.html" class="btn">करंट अफेयर्स पढ़ें</a>
+            </div>
+
+            <!-- 8. लेटेस्ट भर्तियां -->
+            <div class="card" onclick="window.location.href='latest-jobs.html'">
+                <h3>लेटेस्ट भर्तियां (Job Alerts)</h3>
+                <p>Agniveervayu, GDS, UPSC, RAS और अन्य सभी सरकारी नौकरियों के ताज़ा नोटिफिकेशन।</p>
+                <a href="latest-jobs.html" class="btn">भर्तियां चेक करें</a>
+            </div>
+
+            <!-- 9. पब्लिक स्पीकिंग -->
+            <div class="card" onclick="window.location.href='public-speaking.html'">
+                <h3>पब्लिक स्पीकिंग</h3>
+                <p>मंच संचालन, स्टेज का डर दूर करने के तरीके, वॉयस मॉड्यूलेशन और टंग ट्विस्टर्स की ट्रेनिंग।</p>
+                <a href="public-speaking.html" class="btn">टिप्स सीखें</a>
+            </div>
+
+            <!-- 10. टेक और कोडिंग -->
+            <div class="card" onclick="window.location.href='tech-coding.html'">
+                <h3>टेक और कोडिंग</h3>
+                <p>वेबसाइट बनाना, Android Studio, Firebase, और डिजिटल क्रिएटर्स के ज़रूरी टूल्स की जानकारी।</p>
+                <a href="tech-coding.html" class="btn">कोडिंग सीखें</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
