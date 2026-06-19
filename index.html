@@ -1,141 +1,239 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deen Singh Family Photo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>पारिवारिक विरासत | Family Lifetime Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4285F4;
+            --secondary: #34A853;
+            --bg-color: #ffffff; /* Pure white background */
+            --sidebar-bg: #f8f9fa;
+            --text-dark: #202124;
+            --text-light: #5f6368;
+            --border-color: #e0e0e0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px; background: var(--sidebar-bg); border-right: 1px solid var(--border-color);
+            padding: 20px; display: flex; flex-direction: column; height: 100vh; overflow-y: auto;
+        }
+        .brand { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .nav-link {
+            padding: 12px 15px; margin-bottom: 10px; border-radius: 8px; color: var(--text-dark);
+            text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s; cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active { background: #e8f0fe; color: var(--primary); }
+        .storage-box { margin-top: auto; padding: 20px; background: #fff; border: 1px solid var(--border-color); border-radius: 12px; text-align: center; }
+        .storage-bar { width: 100%; height: 8px; background: #eee; border-radius: 5px; margin: 10px 0; overflow: hidden; }
+        .storage-fill { width: 45%; height: 100%; background: var(--primary); }
 
-<style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#eef6ff;
-}
-header{
-    background:#0057b8;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-.container{
-    max-width:1000px;
-    margin:auto;
-    padding:20px;
-}
-.login-box{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    text-align:center;
-    box-shadow:0 0 10px rgba(0,0,0,.15);
-}
-.google-btn{
-    background:#0057b8;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:5px;
-    cursor:pointer;
-}
-.gallery{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    margin-top:30px;
-}
-.card{
-    background:white;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 0 10px rgba(0,0,0,.1);
-}
-.card img{
-    width:100%;
-}
-.card .content{
-    padding:10px;
-}
-</style>
+        /* Main Content */
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+        
+        /* Header & Search */
+        header {
+            padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border-color); background: #fff; position: sticky; top: 0; z-index: 10;
+        }
+        .search-bar {
+            background: #f1f3f4; padding: 12px 20px; border-radius: 25px; width: 50%;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .search-bar input { border: none; background: transparent; outline: none; width: 100%; font-size: 16px; }
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+        .upload-btn {
+            background: var(--primary); color: white; border: none; padding: 10px 20px;
+            border-radius: 25px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(66, 133, 244, 0.2);
+        }
+        
+        /* Hero Section */
+        .hero { padding: 40px; background: linear-gradient(135deg, #f8f9fa 0%, #e8f0fe 100%); text-align: center; border-bottom: 1px solid var(--border-color); }
+        .hero h1 { font-size: 36px; margin-bottom: 10px; }
+        .hero p { color: var(--text-light); font-size: 18px; max-width: 600px; margin: 0 auto; }
+
+        /* Section Titles */
+        .section-title { padding: 30px 40px 10px; font-size: 22px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+        .view-all { font-size: 14px; color: var(--primary); cursor: pointer; }
+
+        /* Smart Albums Grid */
+        .albums-container { padding: 10px 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .album-card {
+            background: #fff; border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden;
+            cursor: pointer; transition: 0.3s; position: relative;
+        }
+        .album-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .album-img { width: 100%; height: 140px; background: #eee; object-fit: cover; }
+        .album-info { padding: 15px; }
+        .album-title { font-weight: 600; font-size: 16px; }
+        .album-count { color: var(--text-light); font-size: 13px; }
+
+        /* Photo Gallery Grid */
+        .gallery-container { padding: 10px 40px 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .photo-card { border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; transition: 0.3s; }
+        .photo-card:hover { transform: scale(1.02); }
+        .photo-card img { width: 100%; height: 250px; object-fit: cover; display: block; }
+        .photo-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 15px 15px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white;
+            display: flex; justify-content: space-between; align-items: flex-end; opacity: 0; transition: 0.3s;
+        }
+        .photo-card:hover .photo-overlay { opacity: 1; }
+        .photo-date { font-size: 12px; opacity: 0.8; }
+        .photo-actions i { margin-left: 10px; cursor: pointer; }
+        .photo-actions i:hover { color: var(--primary); }
+
+        /* Admin Controls */
+        .admin-controls { display: none; background: #fff3e0; padding: 15px 40px; border-bottom: 1px solid #ffe0b2; gap: 15px; align-items: center; }
+        .admin-badge { background: #f57c00; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .search-bar { width: 100%; }
+        }
+    </style>
 </head>
 <body>
 
-<header>
-<h1>Deen Singh Family Photo</h1>
-<p>परिवार की यादों का निजी संग्रह</p>
-</header>
+    <div class="sidebar">
+        <div class="brand"><i class="fas fa-camera-retro"></i> पारिवारिक यादें</div>
+        <a class="nav-link active"><i class="fas fa-home"></i> होम (Home)</a>
+        <a class="nav-link"><i class="fas fa-search"></i> एडवांस सर्च</a>
+        <a class="nav-link"><i class="fas fa-images"></i> सभी तस्वीरें</a>
+        <a class="nav-link"><i class="fas fa-folder-open"></i> स्मार्ट एल्बम</a>
+        <a class="nav-link"><i class="fas fa-calendar-alt"></i> टाइमलाइन (वर्ष वार)</a>
+        <a class="nav-link"><i class="fas fa-star"></i> मनपसंद (Favorites)</a>
+        <a class="nav-link"><i class="fas fa-trash-alt"></i> ट्रैश (Recycle Bin)</a>
+        
+        <div class="storage-box">
+            <i class="fab fa-google-drive" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
+            <p style="font-size: 14px; font-weight: 600;">Google Photos स्टोरेज</p>
+            <div class="storage-bar"><div class="storage-fill"></div></div>
+            <p style="font-size: 12px; color: var(--text-light);">45 GB / 100 GB उपयोग हुआ</p>
+        </div>
+    </div>
 
-<div class="container">
+    <div class="main-content">
+        
+        <header>
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: var(--text-light);"></i>
+                <input type="text" placeholder="तस्वीरें खोजें (उदा: 2023 की दिवाली, जयपुर की यात्रा)...">
+                <i class="fas fa-sliders-h" style="color: var(--text-light); cursor: pointer;" title="एडवांस फ़िल्टर"></i>
+            </div>
+            <div class="header-actions">
+                <button class="upload-btn" onclick="document.getElementById('fileUpload').click()">
+                    <i class="fas fa-cloud-upload-alt"></i> अपलोड करें
+                </button>
+                <input type="file" id="fileUpload" style="display: none;" multiple>
+                <img src="https://ui-avatars.com/api/?name=Admin&background=4285F4&color=fff" alt="Profile" style="width: 40px; border-radius: 50%; cursor: pointer;" onclick="toggleAdmin()">
+            </div>
+        </header>
 
-<div class="login-box">
-<h2>Google से साइन इन करें</h2>
+        <div class="admin-controls" id="adminControls">
+            <span class="admin-badge"><i class="fas fa-shield-alt"></i> एडमिन पैनल</span>
+            <span style="font-size: 14px;">लॉगिन: <b>deensingh81@gmail.com</b></span>
+            <button style="margin-left: auto; padding: 5px 15px; border-radius: 15px; border: 1px solid #f57c00; background: transparent; cursor: pointer;">यूज़र एक्सेस मैनेज करें</button>
+        </div>
 
-<!-- Google Sign-In -->
-<div id="g_id_onload"
-data-client_id="YOUR_GOOGLE_CLIENT_ID"
-data-callback="handleCredentialResponse">
-</div>
+        <div class="hero">
+            <h1>परिवार की यादों के खजाने में स्वागत है</h1>
+            <p>यहाँ आपके परिवार की पीढ़ियों की यादें सुरक्षित हैं। यह साइट जीवन भर के लिए डिज़ाइन की गई है।</p>
+        </div>
 
-<div class="g_id_signin"
-data-type="standard">
-</div>
+        <div class="section-title">
+            <span>विशेष एल्बम <i class="fas fa-magic" style="color: #fbbc05; font-size: 18px;"></i></span>
+            <span class="view-all">सभी देखें</span>
+        </div>
+        <div class="albums-container">
+            <div class="album-card">
+                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300" class="album-img">
+                <div class="album-info">
+                    <div class="album-title">भाई-बहनों की मस्ती</div>
+                    <div class="album-count">124 तस्वीरें</div>
+                </div>
+            </div>
+            <div class="album-card">
+                <img src="https://images.unsplash.com/photo-1529156069898-49953eb1b5e4" class="album-img">
+                <div class="album-info">
+                    <div class="album-title">माता-पिता की यादें</div>
+                    <div class="album-count">89 तस्वीरें</div>
+                </div>
+            </div>
+            <div class="album-card">
+                <img src="https://images.unsplash.com/photo-1581952976147-5a4d04603348" class="album-img">
+                <div class="album-info">
+                    <div class="album-title">शादी समारोह</div>
+                    <div class="album-count">340 तस्वीरें</div>
+                </div>
+            </div>
+            <div class="album-card">
+                <img src="https://images.unsplash.com/photo-1506869640319-fea3a2e1087f" class="album-img">
+                <div class="album-info">
+                    <div class="album-title">बचपन के दिन</div>
+                    <div class="album-count">56 तस्वीरें</div>
+                </div>
+            </div>
+        </div>
 
-<p id="status">अभी लॉगिन नहीं किया गया है</p>
-</div>
+        <div class="section-title">
+            <span>हाल ही में जोड़ी गई तस्वीरें</span>
+            <div style="display: flex; gap: 15px; font-size: 14px; font-weight: normal; color: var(--text-light);">
+                <span style="cursor: pointer; color: var(--primary); font-weight: 600;">नवीनतम</span>
+                <span style="cursor: pointer;">सबसे पुरानी</span>
+            </div>
+        </div>
+        <div class="gallery-container" id="mainGallery">
+            </div>
 
-<div class="gallery">
-<div class="card">
-<img src="sample-photo.jpg" alt="Photo">
-<div class="content">
-<h3>पारिवारिक फोटो</h3>
-<p>Google Photos से आयात होने पर यहाँ दिखाई देगी।</p>
-</div>
-</div>
-</div>
+    </div>
 
-</div>
+    <script>
+        // डमी तस्वीरें
+        const photos = [
+            "https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1529156069898-49953eb1b5e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1506869640319-fea3a2e1087f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1581952976147-5a4d04603348?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1476703993599-0035a21b173d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1475503572774-15a45e5d60b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ];
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+        const gallery = document.getElementById('mainGallery');
 
-<script>
-function handleCredentialResponse(response) {
-    document.getElementById("status").innerHTML =
-    "Google Login सफल हुआ";
-    
-    // यहाँ आगे सर्वर पर टोकन भेजा जाएगा
-    // और Google Photos API से फोटो प्राप्त की जाएँगी
-}
-</script><script>
-function handleCredentialResponse(response) {
+        photos.forEach((url, i) => {
+            gallery.innerHTML += `
+                <div class="photo-card">
+                    <img src="${url}" alt="Family Memory">
+                    <div class="photo-overlay">
+                        <div>
+                            <div class="photo-date">अक्टूबर 2023</div>
+                            <div style="font-weight: 500; font-size: 14px;">पारिवारिक यात्रा</div>
+                        </div>
+                        <div class="photo-actions">
+                            <i class="fas fa-heart" title="मनपसंद बनाएं"></i>
+                            <i class="fas fa-share-alt" title="शेयर करें"></i>
+                            <i class="fas fa-download" title="डाउनलोड करें"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
 
-    console.log("Google Login Success");
-
-    document.getElementById("status").innerHTML =
-    "✅ सफलतापूर्वक लॉगिन हो गया";
-
-    localStorage.setItem(
-        "google_token",
-        response.credential
-    );
-
-    setTimeout(function(){
-        window.location.href = "gallery.html";
-    }, 2000);
-}
-</script>
-
+        // एडमिन टॉगल फंक्शन (डेमो के लिए प्रोफाइल फोटो पर क्लिक करें)
+        let adminActive = false;
+        function toggleAdmin() {
+            adminActive = !adminActive;
+            document.getElementById('adminControls').style.display = adminActive ? 'flex' : 'none';
+        }
+    </script>
 </body>
 </html>
-        <script src="https://accounts.google.com/gsi/client" async defer></script>    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-<div id="g_id_onload"
-     data-client_id="YOUR_CLIENT_ID.apps.googleusercontent.com"
-     data-callback="handleCredentialResponse">
-</div>
-
-<div class="g_id_signin" data-type="standard"></div>
-
-<script>
-function handleCredentialResponse(response) {
-    console.log(response.credential);
-}
-</script>
