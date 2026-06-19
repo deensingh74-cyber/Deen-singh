@@ -604,6 +604,253 @@
             document.querySelectorAll('.nav-link').forEach(el => el.clas
         }
     </script>
+</body><!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>पारिवारिक विरासत | Fully Linked Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --primary: #4285F4;
+            --secondary: #34A853;
+            --bg-color: #ffffff; /* User requested pure white */
+            --sidebar-bg: #f8f9fa;
+            --text-dark: #202124;
+            --text-light: #5f6368;
+            --border-color: #e0e0e0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar Styling */
+        .sidebar { width: 280px; background: var(--sidebar-bg); border-right: 1px solid var(--border-color); padding: 20px; display: flex; flex-direction: column; }
+        .brand { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .nav-link { padding: 12px 15px; margin-bottom: 10px; border-radius: 8px; color: var(--text-dark); text-decoration: none; display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background: #e8f0fe; color: var(--primary); }
+        
+        /* Main Content Styling */
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow-y: auto; position: relative; }
+        header { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); background: #fff; position: sticky; top: 0; z-index: 100; }
+        .search-bar { background: #f1f3f4; padding: 12px 20px; border-radius: 25px; width: 40%; display: flex; align-items: center; gap: 10px; }
+        .search-bar input { border: none; background: transparent; outline: none; width: 100%; font-size: 16px; }
+        .header-actions { display: flex; gap: 15px; }
+        .btn { padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; border: none; transition: 0.3s; }
+        .btn-upload { background: var(--primary); color: white; }
+        .btn-upload:hover { background: #2b6cb0; }
+        .btn-auth { background: #202124; color: white; }
+        
+        /* Dynamic Views (Pages) */
+        .view-section { display: none; padding: 30px 40px; animation: fadeIn 0.3s ease-in; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Grid Layouts */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; margin-top: 20px; }
+        .card { border-radius: 12px; overflow: hidden; position: relative; background: #f1f3f4; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+        
+        /* Album Specific */
+        .album-info { padding: 15px; background: #fff; border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 12px 12px; }
+        
+        /* Overlays */
+        .overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 15px 15px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end; opacity: 0; transition: 0.3s; }
+        .card:hover .overlay { opacity: 1; }
+        .action-icon { cursor: pointer; margin-left: 10px; }
+        .action-icon:hover { color: var(--primary); }
+
+        /* Admin Bar */
+        #adminBar { display: none; background: #e8f0fe; padding: 10px 40px; color: #1a73e8; font-weight: 500; font-size: 14px; border-bottom: 1px solid #d2e3fc; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand"><i class="fas fa-camera-retro"></i> पारिवारिक यादें</div>
+        <a class="nav-link active" onclick="switchView('homeView', this)"><i class="fas fa-home"></i> होम (डैशबोर्ड)</a>
+        <a class="nav-link" onclick="switchView('allPhotosView', this)"><i class="fas fa-images"></i> सभी तस्वीरें</a>
+        <a class="nav-link" onclick="switchView('albumsView', this)"><i class="fas fa-folder-open"></i> स्मार्ट एल्बम</a>
+        <a class="nav-link" onclick="switchView('timelineView', this)"><i class="fas fa-clock"></i> टाइमलाइन</a>
+        <a class="nav-link" onclick="switchView('favoritesView', this)"><i class="fas fa-heart"></i> मनपसंद</a>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: var(--text-light);"></i>
+                <input type="text" placeholder="सर्च करें...">
+            </div>
+            <div class="header-actions">
+                <input type="file" id="fileInput" style="display: none;" accept="image/*" multiple onchange="uploadFiles(event)">
+                <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-upload"></i> अपलोड
+                </button>
+                <button class="btn btn-auth" id="loginBtn" onclick="handleLogin()">
+                    <i class="fab fa-google"></i> Google से जुड़ें
+                </button>
+            </div>
+        </header>
+
+        <div id="adminBar">
+            <i class="fas fa-shield-check"></i> एडमिन एक्सेस स्वीकृत: <b><span id="adminEmailDisplay"></span></b> - Google Photos लिंकिंग सक्रिय।
+        </div>
+
+        <div id="homeView" class="view-section active">
+            <h1 style="margin-bottom: 10px; font-size: 32px;">डैशबोर्ड</h1>
+            <p style="color: var(--text-light); margin-bottom: 30px;">अपनी अनमोल यादों को एक ही जगह प्रबंधित करें।</p>
+            <div class="grid-container" id="homeGallery">
+                <p id="loginPrompt">तस्वीरें लोड करने के लिए अपनी एडमिन ईमेल से लॉगिन करें।</p>
+            </div>
+        </div>
+
+        <div id="allPhotosView" class="view-section">
+            <h2>सभी तस्वीरें (Google Photos Sync)</h2>
+            <div class="grid-container" id="allPhotosGallery"></div>
+        </div>
+
+        <div id="albumsView" class="view-section">
+            <h2>पारिवारिक स्मार्ट एल्बम</h2>
+            <div class="grid-container">
+                <div class="card" onclick="alert('पाँचों भाई-बहनों का फोल्डर खुल रहा है...')">
+                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80">
+                    <div class="album-info">
+                        <h3 style="font-size: 16px;">हम 5 भाई-बहन</h3>
+                        <p style="font-size: 13px; color: var(--text-light);">कॉमेडी, मस्ती और प्रोजेक्ट्स</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1529156069898-49953eb1b5e4?auto=format&fit=crop&w=400&q=80">
+                    <div class="album-info">
+                        <h3 style="font-size: 16px;">माता-पिता</h3>
+                        <p style="font-size: 13px; color: var(--text-light);">आशीर्वाद और यादें</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1581952976147-5a4d04603348?auto=format&fit=crop&w=400&q=80">
+                    <div class="album-info">
+                        <h3 style="font-size: 16px;">त्यौहार और समारोह</h3>
+                        <p style="font-size: 13px; color: var(--text-light);">सभी उत्सव</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="timelineView" class="view-section">
+            <h2>वर्ष वार टाइमलाइन</h2>
+            <p style="margin-top: 20px; color: var(--text-light);">यहाँ एक वर्टिकल लाइन होगी जो 2015 से लेकर आज तक की तस्वीरें दिखाएगी। (Google API सिंक होने के बाद डेटा यहाँ दिखेगा)।</p>
+        </div>
+
+        <div id="favoritesView" class="view-section">
+            <h2>मनपसंद तस्वीरें <i class="fas fa-heart" style="color: red;"></i></h2>
+            <div class="grid-container" id="favoritesGallery">
+                 <p style="color: var(--text-light);">अभी तक कोई तस्वीर 'पसंदीदा' में नहीं जोड़ी गई है।</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // आपके द्वारा दी गई मास्टर एडमिन ईमेल
+        const ALLOWED_ADMINS = ["deensingh81@gmail.com", "deensingh74@gmail.com"];
+        let isAuthenticated = false;
+
+        // 1. Navigation Logic (लिंकिंग ऑप्शन)
+        function switchView(viewId, element) {
+            // सारे व्यू छुपाएं
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+            // सारा एक्टिव स्टाइल हटाएं
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            // जो क्लिक किया है उसे दिखाएं
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // 2. Authentication & Google Photos Link
+        function handleLogin() {
+            if (isAuthenticated) {
+                // Logout Logic
+                isAuthenticated = false;
+                document.getElementById('loginBtn').innerHTML = '<i class="fab fa-google"></i> Google से जुड़ें';
+                document.getElementById('adminBar').style.display = 'none';
+                document.getElementById('homeGallery').innerHTML = '<p id="loginPrompt">तस्वीरें लोड करने के लिए अपनी एडमिन ईमेल से लॉगिन करें।</p>';
+                document.getElementById('allPhotosGallery').innerHTML = '';
+            } else {
+                // यह वह जगह है जहाँ असली Google OAuth 2.0 पॉपअप खुलेगा।
+                // डेमो के लिए, हम एक प्रॉम्प्ट का उपयोग कर रहे हैं। 
+                let userEmail = prompt("Google Auth प्रमाणीकरण: अपनी ईमेल दर्ज करें", "deensingh81@gmail.com");
+                
+                if (userEmail) {
+                    userEmail = userEmail.toLowerCase();
+                    
+                    // सुरक्षा जांच: क्या ईमेल दी गई दो आईडी में से एक है?
+                    if (ALLOWED_ADMINS.includes(userEmail)) {
+                        isAuthenticated = true;
+                        document.getElementById('loginBtn').innerHTML = '<i class="fas fa-sign-out-alt"></i> लॉग आउट';
+                        document.getElementById('adminBar').style.display = 'block';
+                        document.getElementById('adminEmailDisplay').innerText = userEmail;
+                        
+                        // Google Photos से डेटा लोड करने का फंक्शन कॉल करें
+                        fetchGooglePhotos();
+                    } else {
+                        alert("एक्सेस अस्वीकृत! यह एक प्राइवेट पारिवारिक साइट है। केवल एडमिन (deensingh81 या deensingh74) ही Google Photos सिंक कर सकते हैं।");
+                    }
+                }
+            }
+        }
+
+        // 3. Simulated Google Photos API Fetch
+        function fetchGooglePhotos() {
+            // जब API कनेक्ट होगा, तो यह लूप Google Cloud से डेटा खींचेगा।
+            const photos = [
+                "https://images.unsplash.com/photo-1476703993599-0035a21b173d?w=600&q=80",
+                "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600&q=80",
+                "https://images.unsplash.com/photo-1581952976147-5a4d04603348?w=600&q=80",
+                "https://images.unsplash.com/photo-1506869640319-fea3a2e1087f?w=600&q=80"
+            ];
+
+            const homeContainer = document.getElementById('homeGallery');
+            const allContainer = document.getElementById('allPhotosGallery');
+            
+            let htmlContent = '';
+            photos.forEach(url => {
+                htmlContent += `
+                    <div class="card">
+                        <img src="${url}">
+                        <div class="overlay">
+                            <span style="font-size: 14px; font-weight: 500;"><i class="fab fa-google"></i> Synced</span>
+                            <div>
+                                <i class="fas fa-heart action-icon" title="मनपसंद में डालें"></i>
+                                <i class="fas fa-download action-icon" title="डाउनलोड"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            homeContainer.innerHTML = htmlContent;
+            allContainer.innerHTML = htmlContent;
+        }
+
+        // 4. Upload Function Logic
+        function uploadFiles(event) {
+            if (!isAuthenticated) {
+                alert("फोटो अपलोड करने के लिए पहले अपनी एडमिन ईमेल आईडी से लॉगिन करें!");
+                return;
+            }
+            const files = event.target.files;
+            if (files.length > 0) {
+                alert(`${files.length} फोटो सफलतापूर्वक Google Photos क्लाउड और वेबसाइट पर अपलोड की जा रही हैं...`);
+                // यहाँ API का POST रिक्वेस्ट कोड आएगा
+            }
+        }
+    </script>
 </body>
+</html>
+    
 </html>
 
