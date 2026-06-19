@@ -104,8 +104,25 @@ function handleCredentialResponse(response) {
     // यहाँ आगे सर्वर पर टोकन भेजा जाएगा
     // और Google Photos API से फोटो प्राप्त की जाएँगी
 }
+</script><script>
+function handleCredentialResponse(response) {
+
+    console.log("Google Login Success");
+
+    document.getElementById("status").innerHTML =
+    "✅ सफलतापूर्वक लॉगिन हो गया";
+
+    localStorage.setItem(
+        "google_token",
+        response.credential
+    );
+
+    setTimeout(function(){
+        window.location.href = "gallery.html";
+    }, 2000);
+}
 </script>
 
 </body>
 </html>
-            
+        <script src="https://accounts.google.com/gsi/client" async defer></script>    
