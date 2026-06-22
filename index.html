@@ -293,4 +293,132 @@
     </script>
 </body>
 </html>
+const express = require('express');
+const multer = require('multer');
+const { google } = require('googleapis');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+app.use(express.json());
+
+// अपलोड की गई फाइलों को सर्वर पर अस्थायी रूप से सुरक्षित करने के लिए
+const upload = multer({ dest: 'uploads/' });
+
+// आपकी ईमेल आईडी: deensingh74@gmail.com के लिए Google API क्रेडेंशियल्स
+const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
+const CLIENT_SECRET = 'YOUR_GOOGLE_CLIENT_SECRET';
+const REDIRECT_URI = 'YOUR_REDIRECT_URI'; // उदा. http://localhost:3000/oauth2callback
+const REFRESH_TOKEN = 'YOUR_GOOGLE_REFRESH_TOKEN'; // यूजर ऑथेंटिकेशन के बाद मिलने वाला टोकन
+
+const oauth2Client = new google.auth.OAuth2(
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REDIRECT_URI
+);
+
+// रिफ्रेश टोकन सेट करें ताकि सर्वर बिना बार-बार लॉगिन मांगे काम कर सके
+oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+// नकली लोकल डेटाबेस (असल सिस्टम में यहाँ MongoDB या PostgreSQL का कोड आएगा)
+let dbApplications = [];
+
+/**
+ * 1. नया आवेदन प्राप्त करने और दस्तावेज़ को Google पर अपलोड करने का API endpoint
+ */
+app.post('/api/submit-application', upload.single('document'), async (req, res) => {
+    try {
+        const { name, phone, serviceType } = req.body;
+        const file = req.file; // छात्र द्वारा अपलोड किया गया दस्तावेज़
+
+        if (!file) {
+            return res.status(400).send({ success: false, message: 'दस्तावेज़ अपलोड करना अनिवार्य है।' });
+        }
+
+        console.log(`नया आवेदन प्राप्त हुआ: ${name}, फ़ोन: ${phone}`);
+
+        // Google Drive या Photos पर फाइल अपलोड करने का लॉजिक
+        const drive = google.drive({ version: 'v3', auth: oauth2Client });
+        
+        const fileMetadata = {
+            name: `${name}_${Date.now()}_${file.originalname}`,
+            parents: [] // यदि आप किसी खास फोल्डर में डालना चाहें तो उसकी ID यहाँ आएगी
+        };
+
+        const media = {
+            mimeType: file.mimetype,
+            body: fs.createReadStream(file.path)
+        };
+
+        // फाइल को deensingh74@gmail.com के क्लाउड पर अपलोड करें
+        const googleResponse = await drive.files.create({
+            resource: fileMetadata,
+            media: media,
+            fields: 'id, webViewLink'
+        });
+
+        // अपलोड होने के बाद अस्थायी फाइल को सर्वर से डिलीट करें
+        fs.unlinkSync(file.path);
+
+        // डेटाबेस में सेव करने के लिए ऑब्जेक्ट बनाएं
+        const newApplication = {
+            id: Date.now(),
+            name: name,
+            phone: phone,
+            serviceType: serviceType,
+            googleFileId: googleResponse.data.id, // Google स्टोरेज की यूनिक ID
+            documentUrl: googleResponse.data.webViewLink, // सीधे देखने का लिंक
+            stage: 1, // 1: Adviser स्तर
+            status: "Adviser स्तर पर लंबित"
+        };
+
+        // डेटाबेस में सुरक्षित करें
+        dbApplications.push(newApplication);
+
+        res.status(200).send({
+            success: true,
+            message: 'आवेदन सफलतापूर्वक जमा हुआ और दस्तावेज़ क्लाउड पर सिंक हो गया!',
+            data: newApplication
+        });
+
+    } catch (error) {
+        console.error('अपलोड या डेटाबेस एरर:', error);
+        res.status(500).send({ success: false, message: 'सर्वर में कुछ गड़बड़ हुई।' });
+    }
+});
+
+/**
+ * 2. 3-स्तरीय अप्रूवल को अपडेट करने का API endpoint
+ */
+app.post('/api/approve-stage', (req, res) => {
+    const { applicationId, currentRole } = req.body;
+    
+    const appItem = dbApplications.find(a => a.id === parseInt(applicationId));
+    
+    if (!appItem) {
+        return res.status(404).send({ success: false, message: 'आवेदन नहीं मिला।' });
+    }
+
+    // रोल आधारित सुरक्षा और स्टेज प्रोग्रेशन लॉजिक
+    if (currentRole === 'adviser' && appItem.stage === 1) {
+        appItem.stage = 2;
+        appItem.status = "Level 2 स्तर पर लंबित";
+    } else if (currentRole === 'level2' && appItem.stage === 2) {
+        appItem.stage = 3;
+        appItem.status = "Level 3 स्तर पर लंबित";
+    } else if (currentRole === 'level3' && appItem.stage === 3) {
+        appItem.stage = 4;
+        appItem.status = "पूर्ण रूप से स्वीकृत (Approved)";
+    } else {
+        return res.status(400).send({ success: false, message: 'आप इस स्टेज को अप्रूव नहीं कर सकते या अनधिकृत रोल है।' });
+    }
+
+    res.status(200).send({ success: true, message: 'स्थिति सफलतापूर्वक अपडेट की गई', data: appItem });
+});
+
+// सर्वर चालू करें
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`UGPF बैकएंड सर्वर पोर्ट ${PORT} पर सुरक्षित रूप से लाइव है...`);
+});
 
