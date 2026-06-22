@@ -1,145 +1,296 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>United Global Peace Foundation (UGPF)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>UGPF - सेवा परमो धर्म (पैनल)</title>
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #ff9933;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --bg-color: #f4f6f9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0; background-color: var(--bg-color); color: #333;
+        }
+        header {
+            background-color: var(--primary-color); color: white; padding: 15px;
+            text-align: center; border-bottom: 5px solid var(--secondary-color);
+            position: relative;
+        }
+        header h1 { margin: 0; font-size: 26px; }
+        header p { margin: 5px 0 0 0; font-style: italic; color: #ddd; }
+        
+        .user-badge {
+            position: absolute; right: 20px; top: 25px; background: rgba(255,255,255,0.2);
+            padding: 5px 12px; border-radius: 20px; font-size: 14px;
+        }
+        .logout-btn {
+            background: var(--danger-color); border: none; color: white; 
+            padding: 2px 8px; border-radius: 4px; cursor: pointer; margin-left: 10px;
+        }
+
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h2 { color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        
+        /* लॉगिन स्क्रीन */
+        .login-box { max-width: 400px; margin: 100px auto; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        
+        button {
+            background-color: var(--primary-color); color: white; padding: 12px 20px; border: none;
+            border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%;
+        }
+        button:hover { background-color: #002244; }
+        
+        /* ग्रिड और डैशबोर्ड */
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        .application-item {
+            background: #f9f9f9; padding: 15px; margin-bottom: 15px;
+            border-left: 5px solid var(--secondary-color); border-radius: 4px;
+            position: relative;
+        }
+        .status-badge {
+            display: inline-block; padding: 4px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: bold; color: white;
+        }
+        .stage-1 { background-color: #ffc107; color: #333; }
+        .stage-2 { background-color: #17a2b8; }
+        .stage-3 { background-color: #6f42c1; }
+        .approved { background-color: var(--success-color); }
+        
+        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-approve { background-color: var(--success-color); width: auto; font-size: 13px; padding: 6px 12px; }
+        .btn-edit { background-color: #6c757d; width: auto; font-size: 13px; padding: 6px 12px; }
+    </style>
 </head>
 <body>
 
     <header>
-        <div class="container">
-            <div id="branding">
-                <h1><span class="highlight">UGPF</span> Foundation</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li class="current"><a href="#">होम</a></li>
-                    <li><a href="#">हमारे बारे में</a></li>
-                    <li><a href="#">कार्यकम</a></li>
-                    <li><a href="#">संपर्क करें</a></li>
-                </ul>
-            </nav>
+        <h1>UGPF (United Global Peace Foundation)</h1>
+        <p>सेवा परमो धर्म</p>
+        <div id="userBadge" class="user-badge" style="display: none;">
+            <span id="userEmailTxt"></span>
+            <button class="logout-btn" onclick="logout()">लॉगआउट</button>
         </div>
     </header>
 
-    <section id="showcase">
-        <div class="container">
-            <h1>वैश्विक शांति और सद्भाव को बढ़ावा देना</h1>
-            <p>United Global Peace Foundation समाज में सकारात्मक बदलाव और शांति लाने के लिए समर्पित है।</p>
+    <div class="container">
+        
+        <div id="loginSection" class="card login-box">
+            <h2>🔐 सुरक्षित लॉगिन (UGPF)</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>ईमेल आईडी:</label>
+                    <input type="email" id="loginEmail" required placeholder="example@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>आपका रोल/स्तर चुनें:</label>
+                    <select id="loginRole">
+                        <option value="student">Student (सिर्फ फॉर्म भरने के लिए)</option>
+                        <option value="adviser">Adviser (स्तर 1 - जांच अधिकारी)</option>
+                        <option value="level2">Level 2 (स्तर 2 - मध्य अधिकारी)</option>
+                        <option value="level3">Level 3 (स्तर 3 - अंतिम अधिकारी)</option>
+                    </select>
+                </div>
+                <button type="submit">डैशबोर्ड में प्रवेश करें</button>
+            </form>
         </div>
-    </section>
 
-    <section id="main-content">
-        <div class="container">
-            <h2>हमारा उद्देश्य</h2>
-            <p>हमारा लक्ष्य शिक्षा, स्वास्थ्य और सामाजिक विकास के माध्यम से समाज के हर वर्ग को सशक्त बनाना और विश्व में शांति की स्थापना करना है।</p>
+        <div id="appDashboard" class="dashboard-grid" style="display: none;">
+            
+            <div class="card" id="studentFormCard">
+                <h2>📝 नया आवेदन पत्र</h2>
+                <form id="studentApplicationForm" onsubmit="submitNewForm(event)">
+                    <div class="form-group">
+                        <label>छात्र/आवेदक का नाम:</label>
+                        <input type="text" id="studName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>मोबाइल नंबर:</label>
+                        <input type="tel" id="studPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>दस्तावेज़ (मार्कशीट/ID):</label>
+                        <input type="file" id="studDoc" required>
+                    </div>
+                    <button type="submit">दस्तावेज़ और फॉर्म सबमिट करें</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>📊 लाइव ट्रैकिंग एवं अप्रूवल बोर्ड</h2>
+                <div id="noDataMsg" style="text-align: center; color: #888; padding: 20px;">
+                    आपके स्तर पर कोई फॉर्म लंबित या उपलब्ध नहीं है।
+                </div>
+                <div id="adminList"></div>
+            </div>
+
         </div>
-    </section>
+    </div>
 
-    <footer>
-        <p>United Global Peace Foundation &copy; 2026 | सर्वाधिकार सुरक्षित</p>
-    </footer>
+    <script>
+        // डमी डेटाबेस
+        let currentLoggedUser = null;
+        let dbApplications = [
+            { id: 101, name: "राहुल शर्मा", phone: "98290XXXXX", doc: "aadhaar.pdf", stage: 1, status: "Adviser स्तर पर लंबित" },
+            { id: 102, name: "प्रिया सिंह", phone: "70140XXXXX", doc: "marksheet.pdf", stage: 2, status: "Level 2 स्तर पर लंबित" }
+        ];
 
+        // लॉगिन हैंडलर
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            let role = document.getElementById('loginRole').value;
+
+            // विशेष सुरक्षा: यदि ईमेल deensingh74@gmail.com है, तो उसे 'superadmin' (होस्ट) माना जाएगा
+            if(email === "deensingh74@gmail.com") {
+                role = "superadmin";
+            }
+
+            currentLoggedUser = { email: email, role: role };
+            
+            // UI अपडेट करें
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('appDashboard').style.display = 'grid';
+            document.getElementById('userBadge').style.display = 'block';
+            document.getElementById('userEmailTxt').innerText = email + ` (${role.toUpperCase()})`;
+
+            // यदि लॉगिन होस्ट या ऑफिसर का है, तो फॉर्म भरने की विंडो छुपा सकते हैं/रख सकते हैं
+            if(role !== 'student' && role !== 'superadmin') {
+                document.getElementById('studentFormCard').style.display = 'none';
+                document.getElementById('appDashboard').style.gridTemplateColumns = '1fr';
+            } else {
+                document.getElementById('studentFormCard').style.display = 'block';
+                document.getElementById('appDashboard').style.gridTemplateColumns = '1fr 2fr';
+            }
+
+            renderDashboard();
+        }
+
+        // लॉगआउट फंक्शन
+        function logout() {
+            currentLoggedUser = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('appDashboard').style.display = 'none';
+            document.getElementById('userBadge').style.display = 'none';
+        }
+
+        // नया फॉर्म सबमिट करना (छात्र द्वारा)
+        function submitNewForm(event) {
+            event.preventDefault();
+            const name = document.getElementById('studName').value;
+            const phone = document.getElementById('studPhone').value;
+            const file = document.getElementById('studDoc').files[0]?.name || "uploaded_doc.pdf";
+
+            const newApplication = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                doc: file,
+                stage: 1, // शुरुआत हमेशा Adviser से होगी
+                status: "Adviser स्तर पर लंबित"
+            };
+
+            dbApplications.push(newApplication);
+            document.getElementById('studentApplicationForm').reset();
+            alert("आपका फॉर्म सेव कर लिया गया है। यह सबसे पहले Adviser स्तर पर जांचा जाएगा।");
+            renderDashboard();
+        }
+
+        // संपादन व्यवस्था (Edit Option)
+        function editForm(id) {
+            const item = dbApplications.find(a => a.id === id);
+            if(item) {
+                const newName = prompt("आवेदक का नया नाम सुधारें:", item.name);
+                const newPhone = prompt("आवेदक का नया मोबाइल सुधारें:", item.phone);
+                if(newName) item.name = newName;
+                if(newPhone) item.phone = newPhone;
+                renderDashboard();
+            }
+        }
+
+        // स्तरवार अप्रूवल व्यवस्था (Workflow Logic)
+        function approveStep(id) {
+            const item = dbApplications.find(a => a.id === id);
+            if(item) {
+                if(item.stage === 1) {
+                    item.stage = 2;
+                    item.status = "Level 2 स्तर पर लंबित";
+                } else if(item.stage === 2) {
+                    item.stage = 3;
+                    item.status = "Level 3 स्तर पर लंबित";
+                } else if(item.stage === 3) {
+                    item.stage = 4;
+                    item.status = "पूर्ण रूप से स्वीकृत (Approved)";
+                }
+                renderDashboard();
+            }
+        }
+
+        // डैशबोर्ड रेंडरिंग फ़िल्टर (मुख्य लॉजिक)
+        function renderDashboard() {
+            const listContainer = document.getElementById('adminList');
+            const noDataMsg = document.getElementById('noDataMsg');
+            listContainer.innerHTML = '';
+            
+            // वर्तमान लॉगिन रोल के हिसाब से डेटा छानना (Filter)
+            let filteredData = dbApplications.filter(app => {
+                if (currentLoggedUser.role === 'superadmin') return true; // होस्ट सब देख सकता है
+                if (currentLoggedUser.role === 'student') return true; // छात्र अपना और सबका स्टेटस देख सकता है
+                if (currentLoggedUser.role === 'adviser' && app.stage === 1) return true; // एडवाइजर सिर्फ स्टेज 1 देखेगा
+                if (currentLoggedUser.role === 'level2' && app.stage === 2) return true; // लेवल 2 सिर्फ स्टेज 2 देखेगा
+                if (currentLoggedUser.role === 'level3' && app.stage === 3) return true; // लेवल 3 सिर्फ स्टेज 3 देखेगा
+                return false;
+            });
+
+            if(filteredData.length === 0) {
+                noDataMsg.style.display = 'block';
+                return;
+            }
+            
+            noDataMsg.style.display = 'none';
+
+            filteredData.forEach(app => {
+                let badgeClass = `stage-${app.stage}`;
+                if(app.stage === 4) badgeClass = 'approved';
+
+                // यह तय करना कि क्या वर्तमान यूजर इसे अप्रूव करने का अधिकार रखता है
+                let canApprove = false;
+                if(currentLoggedUser.role === 'superadmin' && app.stage < 4) canApprove = true;
+                if(currentLoggedUser.role === 'adviser' && app.stage === 1) canApprove = true;
+                if(currentLoggedUser.role === 'level2' && app.stage === 2) canApprove = true;
+                if(currentLoggedUser.role === 'level3' && app.stage === 3) canApprove = true;
+
+                // बटन का नाम तय करना
+                let actionTxt = "मंज़ूर करें और आगे भेजें";
+                if(app.stage === 3) actionTxt = "फाइनल अप्रूव (मंज़ूर) करें";
+
+                listContainer.innerHTML += `
+                    <div class="application-item">
+                        <h3>ID: ${app.id} - ${app.name}</h3>
+                        <p><strong>फ़ोन:</strong> ${app.phone} | <strong>दस्तावेज़:</strong> 📄 ${app.doc}</p>
+                        <p><strong>वर्तमान स्थिति:</strong> <span class="status-badge ${badgeClass}">${app.status}</span></p>
+                        
+                        <div class="action-btns">
+                            ${canApprove ? `<button class="btn-approve" onclick="approveStep(${app.id})">✅ ${actionTxt}</button>` : ''}
+                            ${currentLoggedUser.role === 'superadmin' || canApprove ? `<button class="btn-edit" onclick="editForm(${app.id})">✏️ एडिट</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
 </body>
 </html>
-/* सामान्य स्टाइल */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
-}
 
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
-
-/* हेडर */
-header {
-    background: #003366;
-    color: #ffffff;
-    padding-top: 30px;
-    min-height: 70px;
-    border-bottom: #008080 3px solid;
-}
-
-header a {
-    color: #ffffff;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 16px;
-}
-
-header li {
-    float: left;
-    display: inline;
-    padding: 0 20px 0 20px;
-}
-
-header #branding {
-    float: left;
-}
-
-header #branding h1 {
-    margin: 0;
-}
-
-header nav {
-    float: right;
-    margin-top: 10px;
-}
-
-header .highlight, header .current a {
-    color: #00bcbc;
-    font-weight: bold;
-}
-
-header a:hover {
-    color: #00bcbc;
-    font-weight: bold;
-}
-
-/* शोकेस */
-#showcase {
-    min-height: 400px;
-    background: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1200') no-repeat center;
-    background-size: cover;
-    text-align: center;
-    color: #ffffff;
-}
-
-#showcase h1 {
-    margin-top: 100px;
-    font-size: 45px;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px #000;
-}
-
-#showcase p {
-    font-size: 20px;
-    text-shadow: 1px 1px 3px #000;
-}
-
-/* मुख्य सामग्री */
-#main-content {
-    padding: 30px;
-    background: #ffffff;
-    margin-top: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-}
-
-/* फुटर */
-footer {
-    padding: 20px;
-    margin-top: 20px;
-    color: #ffffff;
-    background-color: #003366;
-    text-align: center;
-}
