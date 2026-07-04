@@ -294,4 +294,152 @@
         root.render(<UGPFApp />);
     </script>
 </body>
-</html>
+</html><!-- Admin Login Section -->
+<div id="admin-login-section" style="background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 400px; margin: 40px auto; text-align: center;">
+    <h3 style="color: #4a148c; margin-bottom: 20px;">एडमिन लॉगिन</h3>
+    <p style="color: #666; font-size: 14px; margin-bottom: 15px;">पैनल एक्सेस करने के लिए अपनी एडमिन ईमेल दर्ज करें</p>
+    
+    <input type="email" id="adminEmailInput" placeholder="ईमेल आईडी दर्ज करें" style="width: 90%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
+    <br>
+    <button onclick="verifyAdmin()" style="padding: 10px 20px; background: #ff9800; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 95%;">वेरिफाई करें</button>
+</div>
+
+<!-- Admin Form Builder Section (शुरुआत में यह छुपा रहेगा) -->
+<div id="admin-form-builder" style="display: none; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff9800; padding-bottom: 10px; margin-bottom: 15px;">
+        <h3 style="color: #4a148c; margin: 0;">नया फॉर्म / ऑप्शन बनाएँ (Admin)</h3>
+        <span style="background: #4caf50; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px;">Logged in: deensingh74@gmail.com</span>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label><b>फॉर्म का नाम:</b></label><br>
+        <input type="text" id="formTitle" placeholder="उदाहरण: नया छात्रवृत्ति फॉर्म" style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+
+    <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <h4>नया फील्ड जोड़ें</h4>
+        <input type="text" id="fieldLabel" placeholder="फील्ड का नाम (उदा: 10th Marksheet)" style="padding: 8px; width: 40%;">
+        
+        <select id="fieldType" style="padding: 8px; width: 30%;">
+            <option value="text">टेक्स्ट (Text)</option>
+            <option value="file">डॉक्यूमेंट अपलोड (File Upload)</option>
+            <option value="dropdown">ड्रॉपडाउन (Dropdown)</option>
+            <option value="date">तारीख (Date)</option>
+        </select>
+        
+        <button onclick="addField()" style="padding: 9px 15px; background: #4a148c; color: white; border: none; border-radius: 4px; cursor: pointer;">+ फील्ड जोड़ें</button>
+    </div>
+
+    <!-- Live Preview Section -->
+    <h4>फॉर्म का लाइव प्रीव्यू (छात्रों को ऐसा दिखेगा):</h4>
+    <div id="formPreview" style="border: 1px dashed #ccc; padding: 15px; min-height: 100px; margin-bottom: 20px;">
+        <!-- जोड़े गए फील्ड यहाँ दिखेंगे -->
+    </div>
+
+    <button onclick="saveForm()" style="padding: 10px 20px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">फॉर्म सेव करें (Save JSON)</button>
+    <button onclick="logoutAdmin()" style="padding: 10px 20px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-left: 10px;">लॉगआउट</button>
+</div>
+
+<script>
+    // --- Admin Authentication Logic ---
+    const ADMIN_EMAIL = "deensingh74@gmail.com";
+
+    function verifyAdmin() {
+        const enteredEmail = document.getElementById("adminEmailInput").value.trim();
+        
+        if (enteredEmail === ADMIN_EMAIL) {
+            // ईमेल सही है, लॉगिन सेक्शन छुपाएं और एडमिन पैनल दिखाएं
+            document.getElementById("admin-login-section").style.display = "none";
+            document.getElementById("admin-form-builder").style.display = "block";
+            document.getElementById("adminEmailInput").value = ""; // इनपुट साफ करें
+        } else {
+            // ईमेल गलत है
+            alert("❌ एक्सेस मना है! आप अधिकृत एडमिन नहीं हैं।");
+        }
+    }
+
+    function logoutAdmin() {
+        // एडमिन पैनल छुपाएं और लॉगिन सेक्शन वापस दिखाएं
+        document.getElementById("admin-form-builder").style.display = "none";
+        document.getElementById("admin-login-section").style.display = "block";
+        formSchema = []; // लॉगआउट होने पर फॉर्म का ड्राफ्ट डेटा क्लियर करें
+        updatePreview();
+        document.getElementById("formTitle").value = "";
+    }
+
+
+    // --- Form Builder Logic ---
+    let formSchema = [];
+
+    function addField() {
+        const label = document.getElementById("fieldLabel").value;
+        const type = document.getElementById("fieldType").value;
+
+        if (label.trim() === "") {
+            alert("कृपया फील्ड का नाम दर्ज करें!");
+            return;
+        }
+
+        const fieldData = { id: Date.now(), label: label, type: type };
+        formSchema.push(fieldData);
+        updatePreview();
+        document.getElementById("fieldLabel").value = "";
+    }
+
+    function updatePreview() {
+        const previewDiv = document.getElementById("formPreview");
+        previewDiv.innerHTML = ""; 
+
+        formSchema.forEach(field => {
+            const fieldWrapper = document.createElement("div");
+            fieldWrapper.style.marginBottom = "10px";
+
+            const labelEl = document.createElement("label");
+            labelEl.innerText = field.label + ": ";
+            labelEl.style.fontWeight = "bold";
+            labelEl.style.display = "block";
+
+            let inputEl = document.createElement("input");
+            if (field.type === "text") {
+                inputEl.type = "text";
+                inputEl.placeholder = "यहाँ टाइप करें...";
+            } else if (field.type === "file") {
+                inputEl.type = "file";
+                inputEl.accept = ".pdf, .jpg, .png";
+            } else if (field.type === "date") {
+                inputEl.type = "date";
+            } else if (field.type === "dropdown") {
+                inputEl = document.createElement("select");
+                const defaultOption = document.createElement("option");
+                defaultOption.text = "ऑप्शन चुनें...";
+                inputEl.appendChild(defaultOption);
+            }
+
+            inputEl.style.width = "100%";
+            inputEl.style.padding = "8px";
+            inputEl.style.marginTop = "5px";
+
+            fieldWrapper.appendChild(labelEl);
+            fieldWrapper.appendChild(inputEl);
+            previewDiv.appendChild(fieldWrapper);
+        });
+    }
+
+    function saveForm() {
+        const title = document.getElementById("formTitle").value;
+        if (title.trim() === "" || formSchema.length === 0) {
+            alert("कृपया फॉर्म का नाम और कम से कम एक फील्ड जोड़ें।");
+            return;
+        }
+
+        const finalFormData = {
+            formTitle: title,
+            createdBy: ADMIN_EMAIL,
+            fields: formSchema
+        };
+
+        console.log("डेटाबेस में सेव करने के लिए JSON:", JSON.stringify(finalFormData, null, 2));
+        alert("फॉर्म सफलतापूर्वक जनरेट हो गया! (कंसोल में JSON चेक करें)");
+    }
+</script>
+
