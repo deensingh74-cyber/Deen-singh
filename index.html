@@ -3,226 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study & Form Hub</title>
+    <title>Dinu Padhai Wala | All Exam PYQ & Classes</title>
     <style>
-        /* CSS: वेबसाइट का डिज़ाइन */
+        /* CSS: वेबसाइट की डिजाइन और स्टाइलिंग */
+        :root {
+            --primary-color: #1e3a8a; /* गहरा नीला */
+            --secondary-color: #f59e0b; /* सुनहरा पीला */
+            --bg-color: #f3f4f6;
+            --text-color: #333;
+        }
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
         }
 
+        /* हैडर और नेविगेशन */
         header {
-            background-color: #2c3e50;
+            background-color: var(--primary-color);
             color: white;
-            padding: 20px;
-            text-align: center;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* हीरो सेक्शन (वेलकम बैनर) */
+        .hero {
+            background: linear-gradient(rgba(30, 58, 138, 0.9), rgba(30, 58, 138, 0.7)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #d97706;
+        }
+
+        /* लाइव क्लास अलर्ट */
+        .live-alert {
+            background-color: #ef4444;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        /* मुख्य कंटेंट ग्रिड */
         .container {
-            max-width: 1000px;
-            margin: 30px auto;
+            max-width: 1200px;
+            margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* स्टडी सेक्शन */
-        .study-section {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary-color);
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 5px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
         }
 
+        /* कार्ड डिजाइन (वीडियो और PDF के लिए) */
         .card {
-            background: #ecf0f1;
-            padding: 20px;
-            border-radius: 6px;
-            border-left: 5px solid #3498db;
-        }
-
-        .card h3 {
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .btn:hover {
-            background: #2980b9;
-        }
-
-        /* फॉर्म सेक्शन */
-        .form-section {
             background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
 
-        .form-group {
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: #666;
             margin-bottom: 15px;
         }
 
-        label {
+        /* PDF डाउनलोड बटन */
+        .pdf-btn {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input[type="text"], input[type="email"], select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        button[type="submit"] {
-            background: #27ae60;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-        }
-
-        button[type="submit"]:hover {
-            background: #219653;
-        }
-
-        #successMessage {
-            display: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 15px;
             text-align: center;
+            background-color: #10b981;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
             font-weight: bold;
+        }
+
+        .pdf-btn:hover {
+            background-color: #059669;
+        }
+
+        /* फुटर */
+        footer {
+            background-color: #111827;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Study & Form Collection Hub</h1>
-        <p>यहाँ पढ़ें और अपने ज़रूरी फॉर्म जमा करें</p>
-    </header>
-
-    <div class="container">
-        
-        <!-- 1. स्टडी मटेरियल सेक्शन -->
-        <section class="study-section">
-            <h2>📚 स्टडी मटेरियल (Study Material)</h2>
-            <p>अपनी क्लास के अनुसार नीचे दिए गए नोट्स डाउनलोड करें:</p>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>विज्ञान (Science)</h3>
-                    <p>कक्षा 10वीं और 12वीं के लिए कम्पलीट साइंस नोट्स।</p>
-                    <a href="#" class="btn">नोट्स देखें</a>
-                </div>
-                <div class="card">
-                    <h3>गणित (Maths)</h3>
-                    <p>शॉर्ट ट्रिक्स और सभी फॉर्मूलों की पीडीएफ फाइल।</p>
-                    <a href="#" class="btn">नोट्स देखें</a>
-                </div>
-                <div class="card">
-                    <h3>अंग्रेजी (English)</h3>
-                    <p>बेसिक ग्रामर और राइटिंग स्किल्स गाइड।</p>
-                    <a href="#" class="btn">नोट्स देखें</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. फॉर्म कलेक्शन सेक्शन -->
-        <section class="form-section">
-            <h2>📝 छात्र रजिस्ट्रेशन फॉर्म (Student Registration Form)</h2>
-            <p>वेबसाइट पर रजिस्टर करने के लिए नीचे दिए गए फॉर्म को भरें:</p>
-            
-            <form id="regForm">
-                <div class="form-group">
-                    <label for="fullName">पूरा नाम (Full Name):</label>
-                    <input type="text" id="fullName" required placeholder="अपना नाम लिखें">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">ईमेल आईडी (Email ID):</label>
-                    <input type="email" id="email" required placeholder="अपना ईमेल लिखें">
-                </div>
-
-                <div class="form-group">
-                    <label for="course">कोर्स चुनें (Select Course):</label>
-                    <select id="course" required>
-                        <option value="">-- चुनें --</option>
-                        <option value="science">विज्ञान (Science)</option>
-                        <option value="maths">गणित (Maths)</option>
-                        <option value="english">अंग्रेजी (English)</option>
-                    </select>
-                </div>
-
-                <button type="submit">फॉर्म सबमिट करें</button>
-            </form>
-
-            <!-- सफलता का मैसेज -->
-            <div id="successMessage">🎉 आपका फॉर्म सफलतापूर्वक जमा हो गया है!</div>
-        </section>
-
+    <!-- लाइव क्लास का नोटिफिकेशन -->
+    <div class="live-alert" id="liveAlert">
+        🔴 लाइव क्लास: B.A. 1st Year Economics (शाम 5:00 बजे) - अभी जुड़ें!
     </div>
 
+    <!-- नेविगेशन बार -->
+    <header>
+        <div class="logo">📚 Dinu Padhai Wala</div>
+        <nav>
+            <ul>
+                <li><a href="#home">होम</a></li>
+                <li><a href="#videos">क्लासेस</a></li>
+                <li><a href="#notes">PDF नोट्स</a></li>
+                <li><a href="#about">संपर्क</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- वेलकम सेक्शन -->
+    <section class="hero" id="home">
+        <h1>All Exam PYQ & डिजिटल क्लासेज में आपका स्वागत है</h1>
+        <p>यहाँ आपको मिलेंगी रोज़ाना नई वीडियो क्लासेज, सटीक PDF नोट्स, और लाइव सेशंस। अपनी तैयारी को दें एक नई उड़ान।</p>
+        <a href="#videos" class="btn">आज की क्लास देखें</a>
+    </section>
+
+    <div class="container">
+        <!-- वीडियो क्लासेज सेक्शन -->
+        <div style="text-align: center;">
+            <h2 class="section-title" id="videos">नवीनतम वीडियो क्लासेज</h2>
+        </div>
+        
+        <div class="grid" id="videoGrid">
+            <!-- वीडियो कार्ड 1 -->
+            <div class="card">
+                <div class="video-container">
+                    <!-- यहाँ अपने YouTube वीडियो का Embed Link डालें -->
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Economics Chapter 1: Introduction</h3>
+                    <p class="card-desc">आज की क्लास में हम अर्थशास्त्र के मूलभूत सिद्धांतों को समझेंगे।</p>
+                </div>
+            </div>
+
+            <!-- वीडियो कार्ड 2 -->
+            <div class="card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen></iframe>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Rajasthan GK: महत्वपूर्ण प्रश्न</h3>
+                    <p class="card-desc">आगामी परीक्षाओं के लिए राजस्थान इतिहास के पिछले वर्ष के प्रश्न (PYQ)।</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF नोट्स सेक्शन -->
+        <div style="text-align: center; margin-top: 40px;">
+            <h2 class="section-title" id="notes">महत्वपूर्ण PDF नोट्स</h2>
+        </div>
+        
+        <div class="grid" id="notesGrid">
+            <!-- नोट्स कार्ड 1 -->
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="card-title">📝 Economics Chapter 1 Notes</h3>
+                    <p class="card-desc">हस्तलिखित नोट्स। इसे पढ़ने के बाद वीडियो क्लास जरूर देखें।</p>
+                    <!-- यहाँ अपनी Google Drive PDF का लिंक डालें -->
+                    <a href="https://drive.google.com/file/d/YOUR_DRIVE_LINK_HERE/view" target="_blank" class="pdf-btn">PDF देखें / डाउनलोड करें</a>
+                </div>
+            </div>
+
+            <!-- नोट्स कार्ड 2 -->
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="card-title">📝 Rajasthan GK 500+ PYQ</h3>
+                    <p class="card-desc">सभी पिछली परीक्षाओं में पूछे गए महत्वपूर्ण प्रश्नों का संग्रह।</p>
+                    <a href="https://drive.google.com/file/d/YOUR_DRIVE_LINK_HERE/view" target="_blank" class="pdf-btn">PDF देखें / डाउनलोड करें</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- फुटर -->
+    <footer id="about">
+        <p>&copy; 2026 Dinu Padhai Wala | All Exam PYQ. सभी अधिकार सुरक्षित हैं।</p>
+        <p style="margin-top: 10px; font-size: 0.9rem; color: #aaa;">रोज़ नई क्लासेज और नोट्स के लिए वेबसाइट विजिट करते रहें।</p>
+    </footer>
+
+    <!-- JavaScript: डायनामिक फंक्शनैलिटी के लिए -->
     <script>
-        /* JavaScript: फॉर्म सबमिट होने पर काम करेगा */
-        document.getElementById('regForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // पेज को रीलोड होने से रोकेगा
+        // अगर कोई लाइव क्लास नहीं है, तो अलर्ट को छुपाने का कोड
+        // इसे आप true या false कर सकते हैं
+        const isLiveClassActive = true; 
+        
+        if(!isLiveClassActive) {
+            document.getElementById('liveAlert').style.display = 'none';
+        }
 
-            // यूजर का डेटा निकालना
-            const name = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            const course = document.getElementById('course').value;
-
-            // यहाँ आप डेटा को बैकएंड में भेज सकते हैं (अभी अलर्ट और मैसेज दिखेगा)
-            console.log("Submitted Data:", { name, email, course });
-
-            // सफलता का मैसेज दिखाना
-            const msg = document.getElementById('successMessage');
-            msg.style.display = 'block';
-
-            // फॉर्म को खाली करना
-            document.getElementById('regForm').reset();
-
-            // 4 सेकंड बाद मैसेज को छुपाना
-            setTimeout(() => {
-                msg.style.display = 'none';
-            }, 4000);
+        // वेबसाइट स्क्रॉल होने पर स्मूथ एनीमेशन
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
-
 </body>
 </html>
-
