@@ -3,131 +3,504 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinu Padhai Wala - Study Portal</title>
+    <title>शिक्षा सेतु - शिक्षा का पुल, हर घर तक</title>
     <style>
-        /* वेबसाइट का डिज़ाइन (CSS) */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+        /* ========== ग्लोबल स्टाइल ========== */
+        * {
             margin: 0;
             padding: 0;
-            color: #333;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        header {
-            background: #1a365d;
-            color: white;
-            padding: 30px 20px;
+
+        body {
+            background-color: #F5F7FB;
+        }
+
+        :root {
+            --primary: #0D1B3E;
+            --gold: #FFB800;
+            --white: #FFFFFF;
+            --light-bg: #F5F7FB;
+        }
+
+        /* ========== स्प्लैश स्क्रीन ========== */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        #splashScreen .logo {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        #splashScreen .app-name {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 2px;
+        }
+
+        #splashScreen .tagline {
+            font-size: 16px;
+            color: var(--gold);
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        #splashScreen .loader {
+            margin-top: 40px;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        #splashScreen .loading-text {
+            color: var(--white);
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ========== लॉगिन स्क्रीन ========== */
+        #loginScreen {
+            display: none;
+            min-height: 100vh;
+            background-color: var(--light-bg);
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #0D1B3E 0%, #152A5A 100%);
+            padding: 50px 20px 40px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 0 0 40px 40px;
         }
-        header h1 {
-            margin: 0;
+
+        .login-header h1 {
+            color: var(--white);
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+
+        .login-header p {
+            color: #B0C4DE;
+            font-size: 14px;
+        }
+
+        .login-buttons {
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: 2px solid var(--gold);
+            background-color: var(--white);
+            color: var(--primary);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #FFF8E1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255,184,0,0.3);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 10px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: var(--gold);
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* ========== रजिस्ट्रेशन फॉर्म ========== */
+        #registerForm {
+            display: none;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        #registerForm input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 14px;
+            border: 1px solid #DDD;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        #registerForm .submit-btn {
+            background-color: var(--gold);
+            color: var(--primary);
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* ========== डैशबोर्ड ========== */
+        #dashboard {
+            display: none;
+            min-height: 100vh;
+            background-color: var(--light-bg);
+            padding-bottom: 30px;
+        }
+
+        .top-header {
+            background-color: var(--primary);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-header .brand {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .top-header .search-bar {
+            flex: 1;
+            margin: 0 12px;
+            padding: 10px 14px;
+            border-radius: 20px;
+            border: none;
+            font-size: 13px;
+            background-color: rgba(255,255,255,0.15);
+            color: var(--white);
+        }
+
+        .top-header .search-bar::placeholder {
+            color: #AABBCC;
+        }
+
+        .top-header .icons {
+            display: flex;
+            gap: 16px;
+            color: var(--white);
+            font-size: 20px;
+        }
+
+        .welcome-section {
+            padding: 20px 16px 10px;
+        }
+
+        .welcome-section h2 {
+            color: var(--primary);
+            font-size: 22px;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            padding: 10px 16px;
+        }
+
+        .icon-card {
+            background-color: var(--primary);
+            border: 2px solid var(--gold);
+            border-radius: 16px;
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255,184,0,0.4);
+        }
+
+        .icon-card .icon {
+            font-size: 36px;
+        }
+
+        .icon-card .label {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .icon-grid-small {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .icon-card-small {
+            background-color: var(--white);
+            border: 1px solid #D0E0F0;
+            border-radius: 14px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .icon-card-small:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .icon-card-small .icon {
             font-size: 28px;
         }
-        header p {
-            margin: 10px 0 0 0;
-            color: #a0aec0;
+
+        .icon-card-small .label {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 11px;
+            margin-top: 6px;
         }
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
+
+        .quote-section {
+            text-align: center;
+            padding: 16px;
+            color: #888;
+            font-style: italic;
+            font-size: 13px;
         }
-        .card {
-            background: white;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-top: 4px solid #3182ce;
-        }
-        .card h2 {
-            margin-top: 0;
-            color: #2d3748;
-            font-size: 22px;
-            border-bottom: 2px solid #edf2f7;
-            padding-bottom: 10px;
-        }
-        /* महत्वपूर्ण नोट्स का डिज़ाइन */
-        .important-text {
-            color: #c05621;
-            font-weight: bold;
-            background: #feebc8;
-            padding: 15px;
-            border-left: 5px solid #dd6b20;
-            border-radius: 4px;
-            margin-top: 15px;
-        }
-        /* बटन्स का डिज़ाइन */
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #3182ce;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background 0.3s;
+
+        .footer-bar {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 12px;
+            font-size: 12px;
             margin-top: 10px;
         }
-        .btn:hover {
-            background: #2b6cb0;
-        }
-        .btn-pdf {
-            background: #e53e3e;
-        }
-        .btn-pdf:hover {
-            background: #c53030;
+
+        /* ========== रिस्पॉन्सिव ========== */
+        @media (max-width: 400px) {
+            .icon-card .label { font-size: 11px; }
+            .icon-card-small .label { font-size: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>ऑनलाइन क्लासेज और स्टडी मटेरियल<>
-        <p><https://drive.google.com/file/d/1ZWjNEgk-bzxsP-KSwpoB_QCMmTtpoC7N/view?usp=drivesdk/h1p>
-    </header>
+    <!-- ==================== स्प्लैश स्क्रीन ==================== -->
+    <div id="splashScreen">
+        <div class="logo">🌉📚</div>
+        <div class="app-name">शिक्षा सेतु</div>
+        <div class="tagline">शिक्षा का पुल, हर घर तक</div>
+        <div class="loader"></div>
+        <div class="loading-text">लोड हो रहा है...</div>
+    </div>
 
-    <div class="container">
-        
-        <!-- 1. महत्वपूर्ण नोटिस सेक्शन -->
-        <div class="card" style="border-top-color: #dd6b20;">
-            <h2>📢 आज के लिए महत्वपूर्ण (Important)</h2>
-            <div class="important-text">
-                <!-- ram ram sathiyo-->
-                यहाँ पर आप अपनी क्लास की महत्वपूर्ण जानकारी लिख सकते हैं। जैसे: "आज की इकोनॉमिक्स क्लास शाम 5 बजे होगी और कल टेस्ट है।"
+    <!-- ==================== लॉगिन स्क्रीन ==================== -->
+    <div id="loginScreen">
+        <div class="login-header">
+            <h1>शिक्षा सेतु में आपका स्वागत है! 🙏</h1>
+            <p>सीखने का सफ़र शुरू करने के लिए लॉगिन करें</p>
+        </div>
+
+        <div class="login-buttons" id="loginButtons">
+            <button class="login-btn" onclick="showPhoneLogin()">📱 फ़ोन नंबर से लॉगिन करें</button>
+            <button class="login-btn" onclick="showEmailLogin()">📧 ईमेल / ID से लॉगिन करें</button>
+            <div class="register-link">
+                नए हैं यहाँ? 👉 <a onclick="showRegister()">रजिस्टर करें</a>
             </div>
         </div>
 
-        <!-- 2. लाइव क्लास सेक्शन -->
-        <div class="card">
-            <h2>📺 आज की क्लास का वीडियो</h2>
-            <p>आज का विषय: <strong>यहाँ विषय का नाम लिखें</strong></p>
-            
-            <!-- क्लास का लिंक यहाँ डालें (href के अंदर) -->
-            <a href="यहाँ_अपनी_यूट्यूब_क्लास_का_लिंक_डालें" class="btn" target="_blank">क्लास देखने केhttps://drive.google.com/file/d/1ZWjNEgk-bzxsP-KSwpoB_QCMmTtpoC7N/view?usp=drivesdk/h1 लिए यहाँ क्लिक करें</a>
+        <!-- फ़ोन OTP फॉर्म -->
+        <div id="phoneForm" style="display:none; padding:20px; max-width:400px; margin:0 auto;">
+            <input type="tel" placeholder="फ़ोन नंबर डालें" id="phoneNumber">
+            <button class="login-btn" onclick="sendOTP()">OTP भेजें</button>
+            <input type="text" placeholder="OTP डालें" id="otpInput" style="display:none;">
+            <button class="login-btn" id="verifyOtpBtn" style="display:none;" onclick="verifyOTP()">OTP वेरिफाई करें</button>
+            <p style="text-align:center; margin-top:10px;"><a onclick="goBackToLogin()" style="color:var(--primary); cursor:pointer;">← वापस जाएँ</a></p>
         </div>
 
-        <!-- 3. क्लास पीडीएफ सेक्शन -->
-        <div class="card" style="border-top-color: #e53e3e;">
-            <h2>📝 क्लास पीडीएफ (Notes)</h2>
-            <p>क्लास में पढ़ाए गए नोट्स यहाँ से डाउनलोड करें:</p>
-            
-            <!-- क्लास पीडीएफ का लिंक यहाँ डालें (href के अंदर) -->
-            <a href="यहाँ_क्लास_पीडीएफ_का_लिंक_डालें" class="btn btn-pdf" target="_blank">क्लास नोट्स (PDF) डाउनलोड करें</a>
+        <!-- ईमेल/पासवर्ड फॉर्म -->
+        <div id="emailForm" style="display:none; padding:20px; max-width:400px; margin:0 auto;">
+            <input type="text" placeholder="ईमेल या फ़ोन नंबर">
+            <input type="password" placeholder="पासवर्ड">
+            <button class="login-btn" onclick="directLogin()">लॉगिन करें</button>
+            <p style="text-align:center; margin-top:10px;"><a onclick="goBackToLogin()" style="color:var(--primary); cursor:pointer;">← वापस जाएँ</a></p>
         </div>
 
-        <!-- 4. करंट अफेयर्स सेक्शन -->
-        <div class="card" style="border-top-color: #38a169;">
-            <h2>🌍 डेली करंट अफेयर्स</h2>
-            <p>आज के सभी महत्वपूर्ण करंट अफेयर्स की पीडीएफ:</p>
-            
-            <!-- करंट अफेयर्स पीडीएफ का लिंक यहाँ डालें (href के अंदर) -->
-            <a href="यहाँ_करंट_अफेयर्स_पीडीएफ_का_लिंक_डालें" class="btn btn-pdf" style="background: #38a169;" target="_blank">करंट अफेयर्स (PDF) डाउनलोड करें</a>
+        <!-- रजिस्ट्रेशन फॉर्म -->
+        <div id="registerForm">
+            <h3 style="color:var(--primary); text-align:center; margin-bottom:16px;">नया अकाउंट बनाएँ</h3>
+            <input type="text" placeholder="पूरा नाम">
+            <input type="text" placeholder="ईमेल / फ़ोन नंबर">
+            <input type="text" placeholder="कक्षा / परीक्षा का नाम (वैकल्पिक)">
+            <input type="password" placeholder="पासवर्ड बनाएँ">
+            <input type="password" placeholder="पासवर्ड दोबारा डालें">
+            <button class="login-btn submit-btn" onclick="directLogin()">अकाउंट बनाएँ</button>
+            <p style="text-align:center; margin-top:10px;"><a onclick="goBackToLogin()" style="color:var(--primary); cursor:pointer;">← वापस जाएँ</a></p>
         </div>
-
     </div>
+
+    <!-- ==================== डैशबोर्ड ==================== -->
+    <div id="dashboard">
+        <!-- टॉप हेडर -->
+        <div class="top-header">
+            <span class="brand">🌉 शिक्षा सेतु</span>
+            <input type="text" class="search-bar" placeholder="🔍 कोर्स, नोट्स, टेस्ट खोजें...">
+            <span class="icons">🔔 👤</span>
+        </div>
+
+        <!-- वेलकम सेक्शन -->
+        <div class="welcome-section">
+            <h2>नमस्ते, छात्र! 🌟</h2>
+            <p>आज क्या सीखना चाहेंगे?</p>
+        </div>
+
+        <!-- पहली पंक्ति (3 मुख्य आइकॉन) -->
+        <div class="icon-grid">
+            <div class="icon-card" onclick="alert('📚 माय लाइब्रेरी खुल रही है...')">
+                <div class="icon">📚</div>
+                <div class="label">माय लाइब्रेरी</div>
+            </div>
+            <div class="icon-card" onclick="alert('🔴 लाइव क्लास जुड़ रही है...')">
+                <div class="icon">🔴</div>
+                <div class="label">लाइव क्लास</div>
+            </div>
+            <div class="icon-card" onclick="alert('📝 लाइव टेस्ट खुल रहा है...')">
+                <div class="icon">📝</div>
+                <div class="label">लाइव टेस्ट</div>
+            </div>
+        </div>
+
+        <!-- दूसरी पंक्ति (4 आइकॉन) -->
+        <div class="icon-grid icon-grid-small">
+            <div class="icon-card-small" onclick="alert('🎥 रिकॉर्डेड कोर्स')"><div class="icon">🎥</div><div class="label">रिकॉर्डेड कोर्स</div></div>
+            <div class="icon-card-small" onclick="alert('📄 नोट्स')"><div class="icon">📄</div><div class="label">नोट्स</div></div>
+            <div class="icon-card-small" onclick="alert('📖 ई-बुक्स')"><div class="icon">📖</div><div class="label">ई-बुक्स</div></div>
+            <div class="icon-card-small" onclick="alert('📰 करंट अफेयर्स')"><div class="icon">📰</div><div class="label">करंट अफेयर्स</div></div>
+        </div>
+
+        <!-- तीसरी पंक्ति (4 आइकॉन) -->
+        <div class="icon-grid icon-grid-small">
+            <div class="icon-card-small" onclick="alert('💻 ऑनलाइन कोर्स')"><div class="icon">💻</div><div class="label">ऑनलाइन कोर्स</div></div>
+            <div class="icon-card-small" onclick="alert('📥 ऑफलाइन कोर्स')"><div class="icon">📥</div><div class="label">ऑफलाइन कोर्स</div></div>
+            <div class="icon-card-small" onclick="alert('❓ डाउट सेशन')"><div class="icon">❓</div><div class="label">डाउट सेशन</div></div>
+            <div class="icon-card-small" onclick="alert('⚙️ सेटिंग्स')"><div class="icon">⚙️</div><div class="label">सेटिंग्स</div></div>
+        </div>
+
+        <!-- मोटिवेशनल कोट -->
+        <div class="quote-section">
+            ✨ "शिक्षा सबसे शक्तिशाली हथियार है, जिससे आप दुनिया बदल सकते हैं।" ✨
+        </div>
+
+        <!-- फुटर -->
+        <div class="footer-bar">
+            © शिक्षा सेतु | शिक्षा का पुल, हर घर तक
+        </div>
+    </div>
+
+    <!-- ==================== जावास्क्रिप्ट ==================== -->
+    <script>
+        // स्प्लैश स्क्रीन — 3 सेकंड बाद लॉगिन पर जाएँ
+        setTimeout(() => {
+            document.getElementById('splashScreen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('splashScreen').style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'block';
+            }, 500);
+        }, 2500);
+
+        // फ़ोन लॉगिन दिखाएँ
+        function showPhoneLogin() {
+            document.getElementById('loginButtons').style.display = 'none';
+            document.getElementById('phoneForm').style.display = 'block';
+            document.getElementById('emailForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        // ईमेल लॉगिन दिखाएँ
+        function showEmailLogin() {
+            document.getElementById('loginButtons').style.display = 'none';
+            document.getElementById('emailForm').style.display = 'block';
+            document.getElementById('phoneForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        // रजिस्ट्रेशन दिखाएँ
+        function showRegister() {
+            document.getElementById('loginButtons').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('phoneForm').style.display = 'none';
+            document.getElementById('emailForm').style.display = 'none';
+        }
+
+        // वापस लॉगिन बटन पर जाएँ
+        function goBackToLogin() {
+            document.getElementById('loginButtons').style.display = 'flex';
+            document.getElementById('phoneForm').style.display = 'none';
+            document.getElementById('emailForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        // OTP भेजने का नाटक (डेमो)
+        function sendOTP() {
+            alert('📱 OTP आपके फ़ोन नंबर पर भेज दिया गया है। (डेमो: 123456)');
+            document.getElementById('otpInput').style.display = 'block';
+            document.getElementById('verifyOtpBtn').style.display = 'block';
+        }
+
+        // OTP वेरिफाई (डेमो)
+        function verifyOTP() {
+            alert('✅ OTP वेरिफाई हो गया!');
+            directLogin();
+        }
+
+        // सीधा लॉगिन (डेमो)
+        function directLogin() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+    </script>
 
 </body>
 </html>
-
