@@ -2,26 +2,52 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0D1B3E">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="शिक्षा सेतु - शिक्षा का पुल, हर घर तक | ऑनलाइन कोर्स, लाइव क्लास, टेस्ट और नोट्स">
     <title>शिक्षा सेतु - शिक्षा का पुल, हर घर तक</title>
+
+    <!-- PWA Manifest (भविष्य के लिए तैयार) -->
+    <link rel="manifest" href="data:application/json,{}">
+
     <style>
         /* ========== ग्लोबल स्टाइल ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #F5F7FB;
+            background-color: #F0F2F8;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+            overflow-x: hidden;
         }
 
         :root {
             --primary: #0D1B3E;
+            --primary-light: #152A5A;
             --gold: #FFB800;
+            --gold-light: #FFD54F;
             --white: #FFFFFF;
-            --light-bg: #F5F7FB;
+            --light-bg: #F0F2F8;
+            --red: #E53935;
+            --green: #2E7D32;
+            --blue-accent: #2979FF;
+            --text-dark: #1A1A2E;
+            --text-gray: #666666;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 25px rgba(0,0,0,0.12);
+            --shadow-lg: 0 15px 40px rgba(0,0,0,0.18);
+            --radius-sm: 12px;
+            --radius-md: 18px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ========== स्प्लैश स्क्रीन ========== */
@@ -31,115 +57,206 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, #0D1B3E 0%, #0A1528 50%, #152A5A 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
 
-        #splashScreen .logo {
-            font-size: 60px;
-            margin-bottom: 15px;
+        #splashScreen.hide {
+            opacity: 0;
+            visibility: hidden;
         }
 
-        #splashScreen .app-name {
-            font-size: 38px;
-            font-weight: 800;
-            color: var(--white);
-            letter-spacing: 2px;
+        .splash-logo-container {
+            position: relative;
+            margin-bottom: 20px;
         }
 
-        #splashScreen .tagline {
-            font-size: 16px;
-            color: var(--gold);
-            margin-top: 8px;
-            letter-spacing: 1px;
+        .splash-logo {
+            font-size: 80px;
+            animation: floatLogo 2.5s ease-in-out infinite;
         }
 
-        #splashScreen .loader {
-            margin-top: 40px;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid var(--gold);
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-18px) scale(1.05); }
+        }
+
+        .splash-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 3px solid rgba(255,184,0,0.3);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: pulseRing 2s ease-out infinite;
         }
 
-        #splashScreen .loading-text {
+        @keyframes pulseRing {
+            0% { width: 100px; height: 100px; opacity: 1; }
+            100% { width: 180px; height: 180px; opacity: 0; }
+        }
+
+        .splash-app-name {
+            font-size: 44px;
+            font-weight: 900;
             color: var(--white);
-            margin-top: 12px;
-            font-size: 13px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px rgba(255,184,0,0.4);
         }
 
-        @keyframes spin {
+        .splash-tagline {
+            font-size: 17px;
+            color: var(--gold);
+            margin-top: 12px;
+            letter-spacing: 3px;
+            font-weight: 500;
+        }
+
+        .splash-loader-container {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .splash-loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.15);
+            border-top: 4px solid var(--gold);
+            border-right: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spinLoader 1s linear infinite;
+        }
+
+        @keyframes spinLoader {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .splash-loading-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            letter-spacing: 2px;
         }
 
         /* ========== लॉगिन स्क्रीन ========== */
         #loginScreen {
             display: none;
             min-height: 100vh;
+            min-height: 100dvh;
             background-color: var(--light-bg);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-header {
-            background: linear-gradient(135deg, #0D1B3E 0%, #152A5A 100%);
-            padding: 50px 20px 40px;
+            background: linear-gradient(160deg, #0D1B3E 0%, #152A5A 40%, #1E3A6E 100%);
+            padding: 55px 24px 45px;
             text-align: center;
-            border-radius: 0 0 40px 40px;
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,184,0,0.08);
+            border-radius: 50%;
+        }
+
+        .login-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,184,0,0.06);
+            border-radius: 50%;
         }
 
         .login-header h1 {
             color: var(--white);
-            font-size: 26px;
-            margin-bottom: 6px;
+            font-size: 30px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         .login-header p {
             color: #B0C4DE;
-            font-size: 14px;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
         }
 
-        .login-buttons {
+        .login-container {
             padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            max-width: 400px;
-            margin: 0 auto;
+            max-width: 440px;
+            margin: -20px auto 0;
+            position: relative;
+            z-index: 2;
         }
 
         .login-btn {
             display: block;
             width: 100%;
-            padding: 16px;
+            padding: 17px;
             font-size: 16px;
             font-weight: 600;
-            border-radius: 12px;
+            border-radius: var(--radius-sm);
             border: 2px solid var(--gold);
             background-color: var(--white);
             color: var(--primary);
             cursor: pointer;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
         }
 
-        .login-btn:hover {
-            background-color: #FFF8E1;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255,184,0,0.3);
+        .login-btn:active {
+            transform: scale(0.97);
+            box-shadow: var(--shadow-md);
+        }
+
+        .login-btn.gold-btn {
+            background: linear-gradient(135deg, #FFB800, #FFA000);
+            color: var(--primary);
+            border: none;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn.gold-btn:active {
+            background: linear-gradient(135deg, #FFC107, #FF8F00);
         }
 
         .register-link {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 18px;
             color: #555;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .register-link a {
@@ -147,127 +264,146 @@
             font-weight: 700;
             text-decoration: none;
             cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: var(--transition);
         }
 
-        /* ========== रजिस्ट्रेशन फॉर्म ========== */
-        #registerForm {
-            display: none;
-            padding: 20px;
-            max-width: 400px;
-            margin: 0 auto;
+        .register-link a:active {
+            background-color: #FFF8E1;
         }
 
-        #registerForm input {
-            width: 100%;
-            padding: 14px;
+        .form-group {
             margin-bottom: 14px;
-            border: 1px solid #DDD;
-            border-radius: 10px;
-            font-size: 15px;
         }
 
-        #registerForm .submit-btn {
-            background-color: var(--gold);
+        .form-group input {
+            width: 100%;
+            padding: 15px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(255,184,0,0.1);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 16px;
             color: var(--primary);
-            font-weight: 700;
-            border: none;
             cursor: pointer;
-            font-size: 16px;
+            font-weight: 600;
+            padding: 8px;
+            transition: var(--transition);
+        }
+
+        .back-link:active {
+            color: var(--gold);
         }
 
         /* ========== डैशबोर्ड ========== */
         #dashboard {
             display: none;
             min-height: 100vh;
+            min-height: 100dvh;
             background-color: var(--light-bg);
-            padding-bottom: 30px;
+            padding-bottom: 40px;
+            animation: fadeInUp 0.5s ease;
         }
 
         .top-header {
-            background-color: var(--primary);
-            padding: 14px 16px;
+            background: linear-gradient(90deg, #0D1B3E, #152A5A);
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
 
         .top-header .brand {
             color: var(--white);
             font-weight: 700;
             font-size: 18px;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
         }
 
         .top-header .search-bar {
             flex: 1;
-            margin: 0 12px;
-            padding: 10px 14px;
-            border-radius: 20px;
-            border: none;
+            margin: 0 8px;
+            padding: 10px 16px;
+            border-radius: 25px;
+            border: 1.5px solid rgba(255,255,255,0.2);
             font-size: 13px;
-            background-color: rgba(255,255,255,0.15);
+            background-color: rgba(255,255,255,0.1);
             color: var(--white);
+            max-width: 220px;
+            transition: var(--transition);
+        }
+
+        .top-header .search-bar:focus {
+            outline: none;
+            background-color: rgba(255,255,255,0.2);
+            border-color: var(--gold);
         }
 
         .top-header .search-bar::placeholder {
             color: #AABBCC;
         }
 
-        .top-header .icons {
+        .top-header .header-icons {
             display: flex;
-            gap: 16px;
+            gap: 18px;
             color: var(--white);
-            font-size: 20px;
+            font-size: 21px;
+            cursor: pointer;
+        }
+
+        .top-header .header-icons span {
+            transition: var(--transition);
+            padding: 4px;
+            border-radius: 50%;
+        }
+
+        .top-header .header-icons span:active {
+            background-color: rgba(255,184,0,0.2);
+            transform: scale(0.9);
         }
 
         .welcome-section {
-            padding: 20px 16px 10px;
+            padding: 22px 18px 12px;
         }
 
         .welcome-section h2 {
             color: var(--primary);
-            font-size: 22px;
+            font-size: 26px;
+            font-weight: 800;
         }
 
         .welcome-section p {
-            color: #666;
-            font-size: 14px;
-            margin-top: 4px;
+            color: var(--text-gray);
+            font-size: 15px;
+            margin-top: 6px;
         }
 
+        /* आइकॉन ग्रिड */
         .icon-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
-            padding: 10px 16px;
-        }
-
-        .icon-card {
-            background-color: var(--primary);
-            border: 2px solid var(--gold);
-            border-radius: 16px;
-            padding: 18px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .icon-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(255,184,0,0.4);
-        }
-
-        .icon-card .icon {
-            font-size: 36px;
-        }
-
-        .icon-card .label {
-            color: var(--white);
-            font-weight: 600;
-            font-size: 13px;
-            margin-top: 8px;
+            padding: 8px 16px;
         }
 
         .icon-grid-small {
@@ -275,53 +411,269 @@
             gap: 10px;
         }
 
-        .icon-card-small {
-            background-color: var(--white);
-            border: 1px solid #D0E0F0;
-            border-radius: 14px;
-            padding: 14px 8px;
+        .icon-card {
+            background: linear-gradient(145deg, #0D1B3E, #152A5A);
+            border: 2px solid var(--gold);
+            border-radius: var(--radius-md);
+            padding: 22px 8px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
         }
 
-        .icon-card-small:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .icon-card::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,184,0,0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .icon-card:active {
+            transform: translateY(-5px) scale(0.96);
+            box-shadow: 0 15px 35px rgba(255,184,0,0.4);
+        }
+
+        .icon-card .icon {
+            font-size: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .icon-card .label {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.3px;
+        }
+
+        .icon-card-small {
+            background-color: var(--white);
+            border: 1.5px solid #D8E0EE;
+            border-radius: var(--radius-sm);
+            padding: 16px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .icon-card-small:active {
+            transform: translateY(-4px) scale(0.95);
+            box-shadow: var(--shadow-md);
+            border-color: var(--gold);
         }
 
         .icon-card-small .icon {
-            font-size: 28px;
+            font-size: 30px;
         }
 
         .icon-card-small .label {
             color: var(--primary);
             font-weight: 600;
             font-size: 11px;
-            margin-top: 6px;
+            margin-top: 7px;
         }
 
+        /* कोट और फुटर */
         .quote-section {
             text-align: center;
-            padding: 16px;
+            padding: 22px 18px;
             color: #888;
             font-style: italic;
-            font-size: 13px;
+            font-size: 14px;
+            animation: fadeInUp 1s ease;
         }
 
         .footer-bar {
-            background-color: var(--primary);
-            color: var(--white);
+            background: linear-gradient(90deg, #0D1B3E, #152A5A);
+            color: rgba(255,255,255,0.8);
             text-align: center;
-            padding: 12px;
+            padding: 15px;
             font-size: 12px;
-            margin-top: 10px;
+            margin-top: 25px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ========== मोडल ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.65);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            width: 92%;
+            max-width: 480px;
+            max-height: 82vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.35s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal h3 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 26px;
+            cursor: pointer;
+            color: #999;
+            padding: 4px 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .modal-close:active {
+            background-color: #f0f0f0;
+            color: var(--red);
+        }
+
+        /* ========== कोर्स कार्ड ========== */
+        .course-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin: 12px 0;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--gold);
+            transition: var(--transition);
+        }
+
+        .course-card:active {
+            box-shadow: var(--shadow-md);
+            transform: scale(0.98);
+        }
+
+        .course-card h4 {
+            color: var(--primary);
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .course-card p {
+            color: var(--text-gray);
+            font-size: 13px;
+            margin: 4px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 4px 0;
+        }
+
+        .badge-free {
+            background-color: #E8F5E9;
+            color: var(--green);
+        }
+
+        .badge-premium {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            color: #E65100;
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #FFB800, #FFA000);
+            color: var(--primary);
+        }
+
+        .btn-gold:active {
+            transform: scale(0.95);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        /* ========== लाइव बैज ========== */
+        .live-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--red);
+            border-radius: 50%;
+            animation: blinkLive 1.2s infinite;
+            margin-right: 6px;
+        }
+
+        @keyframes blinkLive {
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--red); }
+            50% { opacity: 0.3; box-shadow: 0 0 2px var(--red); }
         }
 
         /* ========== रिस्पॉन्सिव ========== */
-        @media (max-width: 400px) {
+        @media (min-width: 768px) {
+            .icon-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .icon-grid-small {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .login-container {
+                max-width: 450px;
+            }
+        }
+
+        @media (max-width: 360px) {
             .icon-card .label { font-size: 11px; }
-            .icon-card-small .label { font-size: 10px; }
+            .icon-card-small .label { font-size: 9px; }
+            .splash-app-name { font-size: 32px; }
         }
     </style>
 </head>
@@ -329,11 +681,16 @@
 
     <!-- ==================== स्प्लैश स्क्रीन ==================== -->
     <div id="splashScreen">
-        <div class="logo">🌉📚</div>
-        <div class="app-name">शिक्षा सेतु</div>
-        <div class="tagline">शिक्षा का पुल, हर घर तक</div>
-        <div class="loader"></div>
-        <div class="loading-text">लोड हो रहा है...</div>
+        <div class="splash-logo-container">
+            <div class="splash-ring"></div>
+            <div class="splash-logo">🌉📚</div>
+        </div>
+        <div class="splash-app-name">शिक्षा सेतु</div>
+        <div class="splash-tagline">शिक्षा का पुल, हर घर तक</div>
+        <div class="splash-loader-container">
+            <div class="splash-loader"></div>
+            <div class="splash-loading-text">लोड हो रहा है...</div>
+        </div>
     </div>
 
     <!-- ==================== लॉगिन स्क्रीन ==================== -->
@@ -343,164 +700,14 @@
             <p>सीखने का सफ़र शुरू करने के लिए लॉगिन करें</p>
         </div>
 
-        <div class="login-buttons" id="loginButtons">
-            <button class="login-btn" onclick="showPhoneLogin()">📱 फ़ोन नंबर से लॉगिन करें</button>
-            <button class="login-btn" onclick="showEmailLogin()">📧 ईमेल / ID से लॉगिन करें</button>
-            <div class="register-link">
-                नए हैं यहाँ? 👉 <a onclick="showRegister()">रजिस्टर करें</a>
+        <div class="login-container">
+            <!-- मुख्य लॉगिन बटन -->
+            <div id="loginButtons">
+                <button class="login-btn" onclick="showPhoneLogin()">📱 फ़ोन नंबर से लॉगिन करें</button>
+                <button class="login-btn" onclick="showEmailLogin()">📧 ईमेल / ID से लॉगिन करें</button>
+                <div class="register-link">
+                    नए हैं यहाँ? 👉 <a onclick="showRegister()">रजिस्टर करें</a>
+                </div>
             </div>
-        </div>
 
-        <!-- फ़ोन OTP फॉर्म -->
-        <div id="phoneForm" style="display:none; padding:20px; max-width:400px; margin:0 auto;">
-            <input type="tel" placeholder="फ़ोन नंबर डालें" id="phoneNumber">
-            <button class="login-btn" onclick="sendOTP()">OTP भेजें</button>
-            <input type="text" placeholder="OTP डालें" id="otpInput" style="display:none;">
-            <button class="login-btn" id="verifyOtpBtn" style="display:none;" onclick="verifyOTP()">OTP वेरिफाई करें</button>
-            <p style="text-align:center; margin-top:10px;"><a onclick="goBackToLogin()" style="color:var(--primary); cursor:pointer;">← वापस जाएँ</a></p>
-        </div>
-
-        <!-- ईमेल/पासवर्ड फॉर्म -->
-        <div id="emailForm" style="display:none; padding:20px; max-width:400px; margin:0 auto;">
-            <input type="text" placeholder="ईमेल या फ़ोन नंबर">
-            <input type="password" placeholder="पासवर्ड">
-            <button class="login-btn" onclick="directLogin()">लॉगिन करें</button>
-            <p style="text-align:center; margin-top:10px;"><a onclick="goBackToLogin()" style="color:var(--primary); cursor:pointer;">← वापस जाएँ</a></p>
-        </div>
-
-        <!-- रजिस्ट्रेशन फॉर्म -->
-        <div id="registerForm">
-            <h3 style="color:var(--primary); text-align:center; margin-bottom:16px;">नया अकाउंट बनाएँ</h3>
-            <input type="text" placeholder="पूरा नाम">
-            <input type="text" placeholder="ईमेल / फ़ोन नंबर">
-            <input type="text" placeholder="कक्षा / परीक्षा का नाम (वैकल्पिक)">
-            <input type="password" placeholder="पासवर्ड बनाएँ">
-            <input type="password" placeholder="पासवर्ड दोबारा डालें">
-            <button class="login-btn submit-btn" onclick="directLogin()">अकाउंट बनाएँ</button>
-            <p style="text-align:center; margin-top:10px;"><a onclick="goBackToLogin()" style="color:var(--primary); cursor:pointer;">← वापस जाएँ</a></p>
-        </div>
-    </div>
-
-    <!-- ==================== डैशबोर्ड ==================== -->
-    <div id="dashboard">
-        <!-- टॉप हेडर -->
-        <div class="top-header">
-            <span class="brand">🌉 शिक्षा सेतु</span>
-            <input type="text" class="search-bar" placeholder="🔍 कोर्स, नोट्स, टेस्ट खोजें...">
-            <span class="icons">🔔 👤</span>
-        </div>
-
-        <!-- वेलकम सेक्शन -->
-        <div class="welcome-section">
-            <h2>नमस्ते, छात्र! 🌟</h2>
-            <p>आज क्या सीखना चाहेंगे?</p>
-        </div>
-
-        <!-- पहली पंक्ति (3 मुख्य आइकॉन) -->
-        <div class="icon-grid">
-            <div class="icon-card" onclick="alert('📚 माय लाइब्रेरी खुल रही है...')">
-                <div class="icon">📚</div>
-                <div class="label">माय लाइब्रेरी</div>
-            </div>
-            <div class="icon-card" onclick="alert('🔴 लाइव क्लास जुड़ रही है...')">
-                <div class="icon">🔴</div>
-                <div class="label">लाइव क्लास</div>
-            </div>
-            <div class="icon-card" onclick="alert('📝 लाइव टेस्ट खुल रहा है...')">
-                <div class="icon">📝</div>
-                <div class="label">लाइव टेस्ट</div>
-            </div>
-        </div>
-
-        <!-- दूसरी पंक्ति (4 आइकॉन) -->
-        <div class="icon-grid icon-grid-small">
-            <div class="icon-card-small" onclick="alert('🎥 रिकॉर्डेड कोर्स')"><div class="icon">🎥</div><div class="label">रिकॉर्डेड कोर्स</div></div>
-            <div class="icon-card-small" onclick="alert('📄 नोट्स')"><div class="icon">📄</div><div class="label">नोट्स</div></div>
-            <div class="icon-card-small" onclick="alert('📖 ई-बुक्स')"><div class="icon">📖</div><div class="label">ई-बुक्स</div></div>
-            <div class="icon-card-small" onclick="alert('📰 करंट अफेयर्स')"><div class="icon">📰</div><div class="label">करंट अफेयर्स</div></div>
-        </div>
-
-        <!-- तीसरी पंक्ति (4 आइकॉन) -->
-        <div class="icon-grid icon-grid-small">
-            <div class="icon-card-small" onclick="alert('💻 ऑनलाइन कोर्स')"><div class="icon">💻</div><div class="label">ऑनलाइन कोर्स</div></div>
-            <div class="icon-card-small" onclick="alert('📥 ऑफलाइन कोर्स')"><div class="icon">📥</div><div class="label">ऑफलाइन कोर्स</div></div>
-            <div class="icon-card-small" onclick="alert('❓ डाउट सेशन')"><div class="icon">❓</div><div class="label">डाउट सेशन</div></div>
-            <div class="icon-card-small" onclick="alert('⚙️ सेटिंग्स')"><div class="icon">⚙️</div><div class="label">सेटिंग्स</div></div>
-        </div>
-
-        <!-- मोटिवेशनल कोट -->
-        <div class="quote-section">
-            ✨ "शिक्षा सबसे शक्तिशाली हथियार है, जिससे आप दुनिया बदल सकते हैं।" ✨
-        </div>
-
-        <!-- फुटर -->
-        <div class="footer-bar">
-            © शिक्षा सेतु | शिक्षा का पुल, हर घर तक
-        </div>
-    </div>
-
-    <!-- ==================== जावास्क्रिप्ट ==================== -->
-    <script>
-        // स्प्लैश स्क्रीन — 3 सेकंड बाद लॉगिन पर जाएँ
-        setTimeout(() => {
-            document.getElementById('splashScreen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('splashScreen').style.display = 'none';
-                document.getElementById('loginScreen').style.display = 'block';
-            }, 500);
-        }, 2500);
-
-        // फ़ोन लॉगिन दिखाएँ
-        function showPhoneLogin() {
-            document.getElementById('loginButtons').style.display = 'none';
-            document.getElementById('phoneForm').style.display = 'block';
-            document.getElementById('emailForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'none';
-        }
-
-        // ईमेल लॉगिन दिखाएँ
-        function showEmailLogin() {
-            document.getElementById('loginButtons').style.display = 'none';
-            document.getElementById('emailForm').style.display = 'block';
-            document.getElementById('phoneForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'none';
-        }
-
-        // रजिस्ट्रेशन दिखाएँ
-        function showRegister() {
-            document.getElementById('loginButtons').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('phoneForm').style.display = 'none';
-            document.getElementById('emailForm').style.display = 'none';
-        }
-
-        // वापस लॉगिन बटन पर जाएँ
-        function goBackToLogin() {
-            document.getElementById('loginButtons').style.display = 'flex';
-            document.getElementById('phoneForm').style.display = 'none';
-            document.getElementById('emailForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'none';
-        }
-
-        // OTP भेजने का नाटक (डेमो)
-        function sendOTP() {
-            alert('📱 OTP आपके फ़ोन नंबर पर भेज दिया गया है। (डेमो: 123456)');
-            document.getElementById('otpInput').style.display = 'block';
-            document.getElementById('verifyOtpBtn').style.display = 'block';
-        }
-
-        // OTP वेरिफाई (डेमो)
-        function verifyOTP() {
-            alert('✅ OTP वेरिफाई हो गया!');
-            directLogin();
-        }
-
-        // सीधा लॉगिन (डेमो)
-        function directLogin() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-        }
-    </script>
-
-</body>
-</html>
+            <!-- फ़
