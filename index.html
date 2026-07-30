@@ -710,4 +710,201 @@
                 </div>
             </div>
 
-            <!-- फ़
+            <!-- 📱 फ़ोन नंबर डालें (10 अंक)" maxlength="10">
+                </div>
+                <button class="login-btn gold-btn" onclick="sendOTP()">📩 OTP भेजें</button>
+                <div class="form-group" id="otpGroup" style="display:none;">
+                    <input type="text" id="otpInput" placeholder="🔢 6 अंक का OTP डालें" maxlength="6">
+                </div>
+                <button class="login-btn gold-btn" id="verifyOtpBtn" style="display:none;" onclick="verifyOTP()">✅ OTP वेरिफाई करें</button>
+                <p class="back-link" onclick="goBackToLogin()">← वापस जाएँ</p>
+            </div>
+
+            <!-- ईमेल/पासवर्ड फॉर्म -->
+            <div id="emailForm" style="display:none;">
+                <div class="form-group">
+                    <input type="text" id="emailPhone" placeholder="📧 ईमेल या फ़ोन नंबर">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="🔒 पासवर्ड">
+                </div>
+                <button class="login-btn gold-btn" onclick="loginWithEmail()">🔓 लॉगिन करें</button>
+                <p class="back-link" onclick="goBackToLogin()">← वापस जाएँ</p>
+            </div>
+
+            <!-- रजिस्ट्रेशन फॉर्म -->
+            <div id="registerForm" style="display:none;">
+                <h3 style="color:var(--primary); text-align:center; margin-bottom:18px; font-size:22px;">📝 नया अकाउंट बनाएँ</h3>
+                <div class="form-group">
+                    <input type="text" id="regFullName" placeholder="👤 पूरा नाम *">
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="regPhone" placeholder="📱 फ़ोन नंबर *" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <input type="email" id="regEmail" placeholder="📧 ईमेल *">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="regClass" placeholder="📚 कक्षा / परीक्षा का नाम">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPassword" placeholder="🔒 पासवर्ड बनाएँ (कम से कम 6 अक्षर) *">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regConfirmPassword" placeholder="🔒 पासवर्ड दोबारा डालें *">
+                </div>
+                <button class="login-btn gold-btn" onclick="registerNewUser()">✅ अकाउंट बनाएँ</button>
+                <p class="back-link" onclick="goBackToLogin()">← पहले से अकाउंट है? लॉगिन करें</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== डैशबोर्ड ==================== -->
+    <div id="dashboard">
+        <!-- टॉप हेडर -->
+        <div class="top-header">
+            <span class="brand">🌉 शिक्षा सेतु</span>
+            <input type="text" class="search-bar" placeholder="🔍 खोजें..." id="globalSearch" oninput="handleGlobalSearch()">
+            <span class="header-icons">
+                <span onclick="openNotifications()" title="नोटिफिकेशन">🔔</span>
+                <span onclick="logoutUser()" title="लॉगआउट">🚪</span>
+            </span>
+        </div>
+
+        <!-- वेलकम सेक्शन -->
+        <div class="welcome-section">
+            <h2 id="welcomeName">नमस्ते, छात्र! 🌟</h2>
+            <p>आज क्या सीखना चाहेंगे?</p>
+        </div>
+
+        <!-- पहली पंक्ति (3 मुख्य आइकॉन) -->
+        <div class="icon-grid">
+            <div class="icon-card" onclick="openMyLibrary()">
+                <div class="icon">📚</div>
+                <div class="label">माय लाइब्रेरी</div>
+            </div>
+            <div class="icon-card" onclick="openLiveClass()">
+                <div class="icon">🔴</div>
+                <div class="label">लाइव क्लास</div>
+            </div>
+            <div class="icon-card" onclick="openLiveTest()">
+                <div class="icon">📝</div>
+                <div class="label">लाइव टेस्ट</div>
+            </div>
+        </div>
+
+        <!-- दूसरी पंक्ति (4 आइकॉन) -->
+        <div class="icon-grid icon-grid-small">
+            <div class="icon-card-small" onclick="openRecordedCourses()">
+                <div class="icon">🎥</div>
+                <div class="label">रिकॉर्डेड कोर्स</div>
+            </div>
+            <div class="icon-card-small" onclick="openNotes()">
+                <div class="icon">📄</div>
+                <div class="label">नोट्स</div>
+            </div>
+            <div class="icon-card-small" onclick="openEbooks()">
+                <div class="icon">📖</div>
+                <div class="label">ई-बुक्स</div>
+            </div>
+            <div class="icon-card-small" onclick="openCurrentAffairs()">
+                <div class="icon">📰</div>
+                <div class="label">करंट अफेयर्स</div>
+            </div>
+        </div>
+
+        <!-- तीसरी पंक्ति (4 आइकॉन) -->
+        <div class="icon-grid icon-grid-small">
+            <div class="icon-card-small" onclick="openOnlineCourses()">
+                <div class="icon">💻</div>
+                <div class="label">ऑनलाइन कोर्स</div>
+            </div>
+            <div class="icon-card-small" onclick="openOfflineCourses()">
+                <div class="icon">📥</div>
+                <div class="label">ऑफलाइन कोर्स</div>
+            </div>
+            <div class="icon-card-small" onclick="openDoubtSession()">
+                <div class="icon">❓</div>
+                <div class="label">डाउट सेशन</div>
+            </div>
+            <div class="icon-card-small" onclick="openSettings()">
+                <div class="icon">⚙️</div>
+                <div class="label">सेटिंग्स</div>
+            </div>
+        </div>
+
+        <!-- मोटिवेशनल कोट -->
+        <div class="quote-section" id="motivationalQuote">
+            ✨ "शिक्षा सबसे शक्तिशाली हथियार है, जिससे आप दुनिया बदल सकते हैं।" ✨
+        </div>
+
+        <!-- फुटर -->
+        <div class="footer-bar">
+            © 2026 शिक्षा सेतु | शिक्षा का पुल, हर घर तक | सर्वाधिकार सुरक्षित
+        </div>
+    </div>
+
+    <!-- ==================== मोडल ==================== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent"></div>
+    </div>
+
+    <!-- ==================== जावास्क्रिप्ट ==================== -->
+    <script>
+        // =====================================================
+        // 🔑 CLIENT ID (API URL) — यहाँ डालें
+        // नीचे ,,,,,,,, हटाकर अपना Google Sheets API URL डालें
+        // =====================================================
+        const API_URL = "https://588663534222-l2kl3h3bs44gtu0b0foci69rt62p5onc.apps.googleusercontent.com";
+
+        // =====================================================
+        // ग्लोबल वेरिएबल
+        // =====================================================
+        let currentUser = null;
+        let generatedOTP = "";
+        let allCourses = [];
+
+        const quotes = [
+            "✨ \"शिक्षा सबसे शक्तिशाली हथियार है, जिससे आप दुनिया बदल सकते हैं।\" — नेल्सन मंडेला",
+            "🌟 \"सीखना कभी बंद न करें, क्योंकि ज़िंदगी कभी पढ़ाना बंद नहीं करती।\"",
+            "💪 \"मेहनत इतनी खामोशी से करो कि सफलता शोर मचा दे।\"",
+            "🔥 \"आज का छात्र, कल का लीडर बनेगा।\"",
+            "📚 \"ज्ञान ही वो प्रकाश है जो अंधकार को मिटा देता है।\"",
+            "🎯 \"सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।\" — APJ अब्दुल कलाम",
+            "🏆 \"हार मत मानो, आज का संघर्ष कल की सफलता की नींव है।\""
+        ];
+
+        // =====================================================
+        // ऐप शुरू होते ही
+        // =====================================================
+        window.addEventListener('load', function() {
+            setInterval(changeQuote, 8000);
+
+            const savedUser = localStorage.getItem('shikshaSetuUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                setTimeout(() => {
+                    document.getElementById('splashScreen').classList.add('hide');
+                    setTimeout(() => {
+                        document.getElementById('splashScreen').style.display = 'none';
+                        showDashboardDirect();
+                    }, 400);
+                }, 1800);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('splashScreen').classList.add('hide');
+                    setTimeout(() => {
+                        document.getElementById('splashScreen').style.display = 'none';
+                        document.getElementById('loginScreen').style.display = 'block';
+                    }, 400);
+                }, 2500);
+            }
+        });
+
+        function changeQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            const el = document.getElementById('motivationalQuote');
+            if (el) el.innerHTML = randomQuote;
+        }
+
+
