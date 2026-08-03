@@ -2,907 +2,328 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0D1B3E">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="शिक्षा सेतु - शिक्षा का पुल, हर घर तक | ऑनलाइन कोर्स, लाइव क्लास, टेस्ट और नोट्स">
-    <title>शिक्षा सेतु - शिक्षा का पुल, हर घर तक</title>
-
-    <!-- PWA Manifest (भविष्य के लिए तैयार) -->
-    <link rel="manifest" href="data:application/json,{}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>शिक्षा सेतु</title>
     <style>
-        /* ========== ग्लोबल स्टाइल ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #F0F2F8;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none;
-            user-select: none;
-            overflow-x: hidden;
-        }
-
-        :root {
-            --primary: #0D1B3E;
-            --primary-light: #152A5A;
-            --gold: #FFB800;
-            --gold-light: #FFD54F;
-            --white: #FFFFFF;
-            --light-bg: #F0F2F8;
-            --red: #E53935;
-            --green: #2E7D32;
-            --blue-accent: #2979FF;
-            --text-dark: #1A1A2E;
-            --text-gray: #666666;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-            --shadow-md: 0 8px 25px rgba(0,0,0,0.12);
-            --shadow-lg: 0 15px 40px rgba(0,0,0,0.18);
-            --radius-sm: 12px;
-            --radius-md: 18px;
-            --radius-lg: 24px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* ========== स्प्लैश स्क्रीन ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #F0F2F8; }
+        
         #splashScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0D1B3E 0%, #0A1528 50%, #152A5A 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        #splashScreen.hide {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .splash-logo-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .splash-logo {
-            font-size: 80px;
-            animation: floatLogo 2.5s ease-in-out infinite;
-        }
-
-        @keyframes floatLogo {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-18px) scale(1.05); }
-        }
-
-        .splash-ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
-            border: 3px solid rgba(255,184,0,0.3);
-            border-radius: 50%;
-            animation: pulseRing 2s ease-out infinite;
-        }
-
-        @keyframes pulseRing {
-            0% { width: 100px; height: 100px; opacity: 1; }
-            100% { width: 180px; height: 180px; opacity: 0; }
-        }
-
-        .splash-app-name {
-            font-size: 44px;
-            font-weight: 900;
-            color: var(--white);
-            letter-spacing: 4px;
-            text-shadow: 0 0 30px rgba(255,184,0,0.4);
-        }
-
-        .splash-tagline {
-            font-size: 17px;
-            color: var(--gold);
-            margin-top: 12px;
-            letter-spacing: 3px;
-            font-weight: 500;
-        }
-
-        .splash-loader-container {
-            margin-top: 60px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .splash-loader {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255,255,255,0.15);
-            border-top: 4px solid var(--gold);
-            border-right: 4px solid var(--gold);
-            border-radius: 50%;
-            animation: spinLoader 1s linear infinite;
-        }
-
-        @keyframes spinLoader {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .splash-loading-text {
-            color: rgba(255,255,255,0.7);
-            font-size: 14px;
-            letter-spacing: 2px;
-        }
-
-        /* ========== लॉगिन स्क्रीन ========== */
-        #loginScreen {
-            display: none;
-            min-height: 100vh;
-            min-height: 100dvh;
-            background-color: var(--light-bg);
-            animation: fadeInUp 0.5s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-header {
-            background: linear-gradient(160deg, #0D1B3E 0%, #152A5A 40%, #1E3A6E 100%);
-            padding: 55px 24px 45px;
-            text-align: center;
-            border-radius: 0 0 50px 50px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-header::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: rgba(255,184,0,0.08);
-            border-radius: 50%;
-        }
-
-        .login-header::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: -30px;
-            width: 100px;
-            height: 100px;
-            background: rgba(255,184,0,0.06);
-            border-radius: 50%;
-        }
-
-        .login-header h1 {
-            color: var(--white);
-            font-size: 30px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .login-header p {
-            color: #B0C4DE;
-            font-size: 16px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .login-container {
-            padding: 30px 20px;
-            max-width: 440px;
-            margin: -20px auto 0;
-            position: relative;
-            z-index: 2;
-        }
-
-        .login-btn {
-            display: block;
-            width: 100%;
-            padding: 17px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: var(--radius-sm);
-            border: 2px solid var(--gold);
-            background-color: var(--white);
-            color: var(--primary);
-            cursor: pointer;
-            text-align: center;
-            transition: var(--transition);
-            margin-bottom: 14px;
-            box-shadow: var(--shadow-sm);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-btn:active {
-            transform: scale(0.97);
-            box-shadow: var(--shadow-md);
-        }
-
-        .login-btn.gold-btn {
-            background: linear-gradient(135deg, #FFB800, #FFA000);
-            color: var(--primary);
-            border: none;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .login-btn.gold-btn:active {
-            background: linear-gradient(135deg, #FFC107, #FF8F00);
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 18px;
-            color: #555;
-            font-size: 15px;
-        }
-
-        .register-link a {
-            color: var(--gold);
-            font-weight: 700;
-            text-decoration: none;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: var(--transition);
-        }
-
-        .register-link a:active {
-            background-color: #FFF8E1;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px 16px;
-            border: 2px solid #E0E0E0;
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            transition: var(--transition);
-            background-color: var(--white);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 4px rgba(255,184,0,0.1);
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 16px;
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 600;
-            padding: 8px;
-            transition: var(--transition);
-        }
-
-        .back-link:active {
-            color: var(--gold);
-        }
-
-        /* ========== डैशबोर्ड ========== */
-        #dashboard {
-            display: none;
-            min-height: 100vh;
-            min-height: 100dvh;
-            background-color: var(--light-bg);
-            padding-bottom: 40px;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .top-header {
-            background: linear-gradient(90deg, #0D1B3E, #152A5A);
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        .top-header .brand {
-            color: var(--white);
-            font-weight: 700;
-            font-size: 18px;
-            white-space: nowrap;
-            letter-spacing: 0.5px;
-        }
-
-        .top-header .search-bar {
-            flex: 1;
-            margin: 0 8px;
-            padding: 10px 16px;
-            border-radius: 25px;
-            border: 1.5px solid rgba(255,255,255,0.2);
-            font-size: 13px;
-            background-color: rgba(255,255,255,0.1);
-            color: var(--white);
-            max-width: 220px;
-            transition: var(--transition);
-        }
-
-        .top-header .search-bar:focus {
-            outline: none;
-            background-color: rgba(255,255,255,0.2);
-            border-color: var(--gold);
-        }
-
-        .top-header .search-bar::placeholder {
-            color: #AABBCC;
-        }
-
-        .top-header .header-icons {
-            display: flex;
-            gap: 18px;
-            color: var(--white);
-            font-size: 21px;
-            cursor: pointer;
-        }
-
-        .top-header .header-icons span {
-            transition: var(--transition);
-            padding: 4px;
-            border-radius: 50%;
-        }
-
-        .top-header .header-icons span:active {
-            background-color: rgba(255,184,0,0.2);
-            transform: scale(0.9);
-        }
-
-        .welcome-section {
-            padding: 22px 18px 12px;
-        }
-
-        .welcome-section h2 {
-            color: var(--primary);
-            font-size: 26px;
-            font-weight: 800;
-        }
-
-        .welcome-section p {
-            color: var(--text-gray);
-            font-size: 15px;
-            margin-top: 6px;
-        }
-
-        /* आइकॉन ग्रिड */
-        .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            padding: 8px 16px;
-        }
-
-        .icon-grid-small {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-
-        .icon-card {
-            background: linear-gradient(145deg, #0D1B3E, #152A5A);
-            border: 2px solid var(--gold);
-            border-radius: var(--radius-md);
-            padding: 22px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .icon-card::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 60px;
-            height: 60px;
-            background: rgba(255,184,0,0.1);
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .icon-card:active {
-            transform: translateY(-5px) scale(0.96);
-            box-shadow: 0 15px 35px rgba(255,184,0,0.4);
-        }
-
-        .icon-card .icon {
-            font-size: 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .icon-card .label {
-            color: var(--white);
-            font-weight: 600;
-            font-size: 13px;
-            margin-top: 10px;
-            position: relative;
-            z-index: 1;
-            letter-spacing: 0.3px;
-        }
-
-        .icon-card-small {
-            background-color: var(--white);
-            border: 1.5px solid #D8E0EE;
-            border-radius: var(--radius-sm);
-            padding: 16px 6px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .icon-card-small:active {
-            transform: translateY(-4px) scale(0.95);
-            box-shadow: var(--shadow-md);
-            border-color: var(--gold);
-        }
-
-        .icon-card-small .icon {
-            font-size: 30px;
-        }
-
-        .icon-card-small .label {
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 11px;
-            margin-top: 7px;
-        }
-
-        /* कोट और फुटर */
-        .quote-section {
-            text-align: center;
-            padding: 22px 18px;
-            color: #888;
-            font-style: italic;
-            font-size: 14px;
-            animation: fadeInUp 1s ease;
-        }
-
-        .footer-bar {
-            background: linear-gradient(90deg, #0D1B3E, #152A5A);
-            color: rgba(255,255,255,0.8);
-            text-align: center;
-            padding: 15px;
-            font-size: 12px;
-            margin-top: 25px;
-            letter-spacing: 0.5px;
-        }
-
-        /* ========== मोडल ========== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.65);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal {
-            background-color: white;
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            width: 92%;
-            max-width: 480px;
-            max-height: 82vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            animation: slideUp 0.35s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(40px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal h3 {
-            color: var(--primary);
-            margin-bottom: 16px;
-            font-size: 21px;
-            font-weight: 700;
-        }
-
-        .modal-close {
-            float: right;
-            font-size: 26px;
-            cursor: pointer;
-            color: #999;
-            padding: 4px 8px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .modal-close:active {
-            background-color: #f0f0f0;
-            color: var(--red);
-        }
-
-        /* ========== कोर्स कार्ड ========== */
-        .course-card {
-            background: white;
-            border-radius: var(--radius-sm);
-            padding: 16px;
-            margin: 12px 0;
-            box-shadow: var(--shadow-sm);
-            border-left: 5px solid var(--gold);
-            transition: var(--transition);
-        }
-
-        .course-card:active {
-            box-shadow: var(--shadow-md);
-            transform: scale(0.98);
-        }
-
-        .course-card h4 {
-            color: var(--primary);
-            margin-bottom: 6px;
-            font-size: 16px;
-        }
-
-        .course-card p {
-            color: var(--text-gray);
-            font-size: 13px;
-            margin: 4px 0;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            margin: 4px 0;
-        }
-
-        .badge-free {
-            background-color: #E8F5E9;
-            color: var(--green);
-        }
-
-        .badge-premium {
-            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
-            color: #E65100;
-        }
-
-        .btn-small {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 13px;
-            margin-top: 8px;
-        }
-
-        .btn-gold {
-            background: linear-gradient(135deg, #FFB800, #FFA000);
-            color: var(--primary);
-        }
-
-        .btn-gold:active {
-            transform: scale(0.95);
-        }
-
-        .btn-outline {
-            background: white;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        /* ========== लाइव बैज ========== */
-        .live-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background-color: var(--red);
-            border-radius: 50%;
-            animation: blinkLive 1.2s infinite;
-            margin-right: 6px;
-        }
-
-        @keyframes blinkLive {
-            0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--red); }
-            50% { opacity: 0.3; box-shadow: 0 0 2px var(--red); }
-        }
-
-        /* ========== रिस्पॉन्सिव ========== */
-        @media (min-width: 768px) {
-            .icon-grid {
-                grid-template-columns: repeat(3, 1fr);
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            .icon-grid-small {
-                grid-template-columns: repeat(4, 1fr);
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            .login-container {
-                max-width: 450px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .icon-card .label { font-size: 11px; }
-            .icon-card-small .label { font-size: 9px; }
-            .splash-app-name { font-size: 32px; }
-        }
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0D1B3E, #152A5A);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
+        }
+        #splashScreen .logo { font-size: 70px; animation: float 2s infinite; }
+        @keyframes float {
+            0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)}
+        }
+        #splashScreen h1 { color: #fff; font-size: 36px; margin-top: 10px; }
+        #splashScreen p { color: #FFB800; margin-top: 8px; }
+        .loader { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,.2); border-top: 4px solid #FFB800; border-radius: 50%; animation: spin 1s linear infinite; margin-top: 30px; }
+        @keyframes spin { 100%{transform:rotate(360deg)} }
+
+        #loginScreen, #dashboard { display: none; min-height: 100vh; }
+        .login-header { background: #0D1B3E; padding: 40px 20px; text-align: center; border-radius: 0 0 40px 40px; }
+        .login-header h2 { color: #fff; font-size: 24px; }
+        .login-header p { color: #B0C4DE; font-size: 14px; margin-top: 6px; }
+        .login-box { padding: 20px; max-width: 400px; margin: 0 auto; }
+        .btn { display: block; width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; border: 2px solid #FFB800; background: #fff; color: #0D1B3E; font-size: 15px; font-weight: 600; cursor: pointer; text-align: center; }
+        .btn-gold { background: #FFB800; border: none; }
+        .btn:active { transform: scale(.97); }
+        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; }
+        .link { text-align: center; margin-top: 10px; color: #555; cursor: pointer; font-weight: 600; }
+        .link a { color: #FFB800; }
+
+        .header { background: #0D1B3E; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .header span { color: #fff; font-weight: 700; }
+        .header button { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+        .welcome { padding: 16px; }
+        .welcome h3 { color: #0D1B3E; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 8px 16px; }
+        .grid4 { grid-template-columns: repeat(4, 1fr); }
+        .card { background: #0D1B3E; border: 2px solid #FFB800; border-radius: 16px; padding: 18px 6px; text-align: center; cursor: pointer; }
+        .card:active { transform: scale(.95); }
+        .card .icon { font-size: 32px; }
+        .card .label { color: #fff; font-size: 12px; margin-top: 6px; font-weight: 600; }
+        .card-small { background: #fff; border: 1px solid #ddd; }
+        .card-small .label { color: #0D1B3E; }
+        .footer { background: #0D1B3E; color: #fff; text-align: center; padding: 12px; font-size: 11px; margin-top: 20px; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.6); z-index: 200; justify-content: center; align-items: center; }
+        .modal { background: #fff; border-radius: 16px; padding: 20px; width: 90%; max-width: 450px; max-height: 80vh; overflow-y: auto; }
+        .modal h3 { color: #0D1B3E; margin-bottom: 12px; }
+        .modal .close { float: right; font-size: 22px; cursor: pointer; color: #999; }
+        .course-card { background: #fff; border-radius: 10px; padding: 12px; margin: 8px 0; border-left: 4px solid #FFB800; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 15px; font-size: 11px; font-weight: 700; }
+        .badge-free { background: #E8F5E9; color: #2E7D32; }
+        .badge-premium { background: #FFF8E1; color: #E65100; }
     </style>
 </head>
 <body>
 
-    <!-- ==================== स्प्लैश स्क्रीन ==================== -->
-    <div id="splashScreen">
-        <div class="splash-logo-container">
-            <div class="splash-ring"></div>
-            <div class="splash-logo">🌉📚</div>
+<!-- स्प्लैश -->
+<div id="splashScreen">
+    <div class="logo">🌉📚</div>
+    <h1>शिक्षा सेतु</h1>
+    <p>शिक्षा का पुल, हर घर तक</p>
+    <div class="loader"></div>
+</div>
+
+<!-- लॉगिन -->
+<div id="loginScreen">
+    <div class="login-header">
+        <h2>स्वागत है! 🙏</h2>
+        <p>लॉगिन करें और सीखना शुरू करें</p>
+    </div>
+    <div class="login-box">
+        <div id="loginMain">
+            <button class="btn" onclick="showPhone()">📱 फ़ोन नंबर से लॉगिन</button>
+            <button class="btn" onclick="showEmail()">📧 ईमेल से लॉगिन</button>
+            <p class="link">नए हैं? <a onclick="showRegister()">रजिस्टर करें</a></p>
         </div>
-        <div class="splash-app-name">शिक्षा सेतु</div>
-        <div class="splash-tagline">शिक्षा का पुल, हर घर तक</div>
-        <div class="splash-loader-container">
-            <div class="splash-loader"></div>
-            <div class="splash-loading-text">लोड हो रहा है...</div>
+        <div id="phoneDiv" style="display:none;">
+            <input class="input-box" id="phoneNum" placeholder="फ़ोन नंबर" maxlength="10">
+            <button class="btn btn-gold" onclick="sendOTP()">OTP भेजें</button>
+            <input class="input-box" id="otpVal" placeholder="OTP डालें" style="display:none;" maxlength="6">
+            <button class="btn btn-gold" id="otpBtn" style="display:none;" onclick="verifyOTP()">वेरिफाई करें</button>
+            <p class="link" onclick="goBack()">← वापस</p>
+        </div>
+        <div id="emailDiv" style="display:none;">
+            <input class="input-box" id="emailVal" placeholder="ईमेल या फ़ोन">
+            <input class="input-box" id="passVal" type="password" placeholder="पासवर्ड">
+            <button class="btn btn-gold" onclick="emailLogin()">लॉगिन करें</button>
+            <p class="link" onclick="goBack()">← वापस</p>
+        </div>
+        <div id="regDiv" style="display:none;">
+            <input class="input-box" id="regName" placeholder="पूरा नाम">
+            <input class="input-box" id="regPhone" placeholder="फ़ोन नंबर" maxlength="10">
+            <input class="input-box" id="regEmail" placeholder="ईमेल">
+            <input class="input-box" id="regPass" type="password" placeholder="पासवर्ड">
+            <button class="btn btn-gold" onclick="registerUser()">अकाउंट बनाएँ</button>
+            <p class="link" onclick="goBack()">← वापस</p>
         </div>
     </div>
+</div>
 
-    <!-- ==================== लॉगिन स्क्रीन ==================== -->
-    <div id="loginScreen">
-        <div class="login-header">
-            <h1>शिक्षा सेतु में आपका स्वागत है! 🙏</h1>
-            <p>सीखने का सफ़र शुरू करने के लिए लॉगिन करें</p>
-        </div>
-
-        <div class="login-container">
-            <!-- मुख्य लॉगिन बटन -->
-            <div id="loginButtons">
-                <button class="login-btn" onclick="showPhoneLogin()">📱 फ़ोन नंबर से लॉगिन करें</button>
-                <button class="login-btn" onclick="showEmailLogin()">📧 ईमेल / ID से लॉगिन करें</button>
-                <div class="register-link">
-                    नए हैं यहाँ? 👉 <a onclick="showRegister()">रजिस्टर करें</a>
-                </div>
-            </div> <!-- 📱 फ़ोन नंबर डालें (10 अंक)" maxlength="10">
-                </div>
-                <button class="login-btn gold-btn" onclick="sendOTP()">📩 OTP भेजें</button>
-                <div class="form-group" id="otpGroup" style="display:none;">
-                    <input type="text" id="otpInput" placeholder="🔢 6 अंक का OTP डालें" maxlength="6">
-                </div>
-                <button class="login-btn gold-btn" id="verifyOtpBtn" style="display:none;" onclick="verifyOTP()">✅ OTP वेरिफाई करें</button>
-                <p class="back-link" onclick="goBackToLogin()">← वापस जाएँ</p>
-            </div>
-
-            <!-- ईमेल/पासवर्ड फॉर्म -->
-            <div id="emailForm" style="display:none;">
-                <div class="form-group">
-                    <input type="text" id="emailPhone" placeholder="📧 ईमेल या फ़ोन नंबर">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="password" placeholder="🔒 पासवर्ड">
-                </div>
-                <button class="login-btn gold-btn" onclick="loginWithEmail()">🔓 लॉगिन करें</button>
-                <p class="back-link" onclick="goBackToLogin()">← वापस जाएँ</p>
-            </div>
-
-            <!-- रजिस्ट्रेशन फॉर्म -->
-            <div id="registerForm" style="display:none;">
-                <h3 style="color:var(--primary); text-align:center; margin-bottom:18px; font-size:22px;">📝 नया अकाउंट बनाएँ</h3>
-                <div class="form-group">
-                    <input type="text" id="regFullName" placeholder="👤 पूरा नाम *">
-                </div>
-                <div class="form-group">
-                    <input type="tel" id="regPhone" placeholder="📱 फ़ोन नंबर *" maxlength="10">
-                </div>
-                <div class="form-group">
-                    <input type="email" id="regEmail" placeholder="📧 ईमेल *">
-                </div>
-                <div class="form-group">
-                    <input type="text" id="regClass" placeholder="📚 कक्षा / परीक्षा का नाम">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="regPassword" placeholder="🔒 पासवर्ड बनाएँ (कम से कम 6 अक्षर) *">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="regConfirmPassword" placeholder="🔒 पासवर्ड दोबारा डालें *">
-                </div>
-                <button class="login-btn gold-btn" onclick="registerNewUser()">✅ अकाउंट बनाएँ</button>
-                <p class="back-link" onclick="goBackToLogin()">← पहले से अकाउंट है? लॉगिन करें</p>
-            </div>
-        </div>
+<!-- डैशबोर्ड -->
+<div id="dashboard">
+    <div class="header">
+        <span>🌉 शिक्षा सेतु</span>
+        <button onclick="logoutUser()">🚪</button>
     </div>
-
-    <!-- ==================== डैशबोर्ड ==================== -->
-    <div id="dashboard">
-        <!-- टॉप हेडर -->
-        <div class="top-header">
-            <span class="brand">🌉 शिक्षा सेतु</span>
-            <input type="text" class="search-bar" placeholder="🔍 खोजें..." id="globalSearch" oninput="handleGlobalSearch()">
-            <span class="header-icons">
-                <span onclick="openNotifications()" title="नोटिफिकेशन">🔔</span>
-                <span onclick="logoutUser()" title="लॉगआउट">🚪</span>
-            </span>
-        </div>
-
-        <!-- वेलकम सेक्शन -->
-        <div class="welcome-section">
-            <h2 id="welcomeName">नमस्ते, छात्र! 🌟</h2>
-            <p>आज क्या सीखना चाहेंगे?</p>
-        </div>
-
-        <!-- पहली पंक्ति (3 मुख्य आइकॉन) -->
-        <div class="icon-grid">
-            <div class="icon-card" onclick="openMyLibrary()">
-                <div class="icon">📚</div>
-                <div class="label">माय लाइब्रेरी</div>
-            </div>
-            <div class="icon-card" onclick="openLiveClass()">
-                <div class="icon">🔴</div>
-                <div class="label">लाइव क्लास</div>
-            </div>
-            <div class="icon-card" onclick="openLiveTest()">
-                <div class="icon">📝</div>
-                <div class="label">लाइव टेस्ट</div>
-            </div>
-        </div>
-
-        <!-- दूसरी पंक्ति (4 आइकॉन) -->
-        <div class="icon-grid icon-grid-small">
-            <div class="icon-card-small" onclick="openRecordedCourses()">
-                <div class="icon">🎥</div>
-                <div class="label">रिकॉर्डेड कोर्स</div>
-            </div>
-            <div class="icon-card-small" onclick="openNotes()">
-                <div class="icon">📄</div>
-                <div class="label">नोट्स</div>
-            </div>
-            <div class="icon-card-small" onclick="openEbooks()">
-                <div class="icon">📖</div>
-                <div class="label">ई-बुक्स</div>
-            </div>
-            <div class="icon-card-small" onclick="openCurrentAffairs()">
-                <div class="icon">📰</div>
-                <div class="label">करंट अफेयर्स</div>
-            </div>
-        </div>
-
-        <!-- तीसरी पंक्ति (4 आइकॉन) -->
-        <div class="icon-grid icon-grid-small">
-            <div class="icon-card-small" onclick="openOnlineCourses()">
-                <div class="icon">💻</div>
-                <div class="label">ऑनलाइन कोर्स</div>
-            </div>
-            <div class="icon-card-small" onclick="openOfflineCourses()">
-                <div class="icon">📥</div>
-                <div class="label">ऑफलाइन कोर्स</div>
-            </div>
-            <div class="icon-card-small" onclick="openDoubtSession()">
-                <div class="icon">❓</div>
-                <div class="label">डाउट सेशन</div>
-            </div>
-            <div class="icon-card-small" onclick="openSettings()">
-                <div class="icon">⚙️</div>
-                <div class="label">सेटिंग्स</div>
-            </div>
-        </div>
-
-        <!-- मोटिवेशनल कोट -->
-        <div class="quote-section" id="motivationalQuote">
-            ✨ "शिक्षा सबसे शक्तिशाली हथियार है, जिससे आप दुनिया बदल सकते हैं।" ✨
-        </div>
-
-        <!-- फुटर -->
-        <div class="footer-bar">
-            © 2026 शिक्षा सेतु | शिक्षा का पुल, हर घर तक | सर्वाधिकार सुरक्षित
-        </div>
+    <div class="welcome"><h3 id="welcomeMsg">नमस्ते! 🌟</h3></div>
+    <div class="grid">
+        <div class="card" onclick="openModal('📚 माय लाइब्रेरी', libraryHTML())"><div class="icon">📚</div><div class="label">माय लाइब्रेरी</div></div>
+        <div class="card" onclick="openModal('🔴 लाइव क्लास', liveClassHTML())"><div class="icon">🔴</div><div class="label">लाइव क्लास</div></div>
+        <div class="card" onclick="openModal('📝 लाइव टेस्ट', liveTestHTML())"><div class="icon">📝</div><div class="label">लाइव टेस्ट</div></div>
     </div>
-
-    <!-- ==================== मोडल ==================== -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal" id="modalContent"></div>
+    <div class="grid grid4">
+        <div class="card card-small" onclick="openModal('🎥 रिकॉर्डेड कोर्स', '<p>जल्द ही उपलब्ध</p>')"><div class="icon">🎥</div><div class="label">रिकॉर्डेड</div></div>
+        <div class="card card-small" onclick="openModal('📄 नोट्स', '<p>जल्द ही उपलब्ध</p>')"><div class="icon">📄</div><div class="label">नोट्स</div></div>
+        <div class="card card-small" onclick="openModal('📖 ई-बुक्स', '<p>जल्द ही उपलब्ध</p>')"><div class="icon">📖</div><div class="label">ई-बुक्स</div></div>
+        <div class="card card-small" onclick="loadCurrentAffairs()"><div class="icon">📰</div><div class="label">करंट अफेयर्स</div></div>
     </div>
+    <div class="grid grid4">
+        <div class="card card-small" onclick="openModal('💻 ऑनलाइन कोर्स', '<p>जल्द ही उपलब्ध</p>')"><div class="icon">💻</div><div class="label">ऑनलाइन</div></div>
+        <div class="card card-small" onclick="openModal('📥 ऑफलाइन कोर्स', '<p>जल्द ही उपलब्ध</p>')"><div class="icon">📥</div><div class="label">ऑफलाइन</div></div>
+        <div class="card card-small" onclick="openModal('❓ डाउट सेशन', doubtHTML())"><div class="icon">❓</div><div class="label">डाउट</div></div>
+        <div class="card card-small" onclick="openModal('⚙️ सेटिंग्स', '<p>जल्द ही उपलब्ध</p>')"><div class="icon">⚙️</div><div class="label">सेटिंग्स</div></div>
+    </div>
+    <div class="footer">© 2026 शिक्षा सेतु | शिक्षा का पुल, हर घर तक</div>
+</div>
 
-    <!-- ==================== जावास्क्रिप्ट ==================== -->
-    <script>
-        // =====================================================
-        // 🔑 CLIENT ID (API URL) — यहाँ डालें
-        // नीचे ,,,,,,,, हटाकर अपना Google Sheets API URL डालें
-        // =====================================================
-        const API_URL = "https://588663534222-l2kl3h3bs44gtu0b0foci69rt62p5onc.apps.googleusercontent.com";
+<!-- मोडल -->
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
 
-        // =====================================================
-        // ग्लोबल वेरिएबल
-        // =====================================================
-        let currentUser = null;
-        let generatedOTP = "";
-        let allCourses = [];
+<script>
+// ========== CLIENT ID यहाँ डालें ==========
+const API_URL = ",,,,,,,,";
 
-        const quotes = [
-            "✨ \"शिक्षा सबसे शक्तिशाली हथियार है, जिससे आप दुनिया बदल सकते हैं।\" — नेल्सन मंडेला",
-            "🌟 \"सीखना कभी बंद न करें, क्योंकि ज़िंदगी कभी पढ़ाना बंद नहीं करती।\"",
-            "💪 \"मेहनत इतनी खामोशी से करो कि सफलता शोर मचा दे।\"",
-            "🔥 \"आज का छात्र, कल का लीडर बनेगा।\"",
-            "📚 \"ज्ञान ही वो प्रकाश है जो अंधकार को मिटा देता है।\"",
-            "🎯 \"सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।\" — APJ अब्दुल कलाम",
-            "🏆 \"हार मत मानो, आज का संघर्ष कल की सफलता की नींव है।\""
-        ];
+let currentUser = null;
+let genOTP = "";
 
-        // =====================================================
-        // ऐप शुरू होते ही
-        // =====================================================
-        window.addEventListener('load', function() {
-            setInterval(changeQuote, 8000);
+// ========== स्प्लैश ==========
+window.onload = function(){
+    let u = localStorage.getItem('ssUser');
+    if(u){
+        currentUser = JSON.parse(u);
+        setTimeout(()=>{
+            document.getElementById('splashScreen').style.display='none';
+            openDashboard();
+        },1500);
+    } else {
+        setTimeout(()=>{
+            document.getElementById('splashScreen').style.display='none';
+            document.getElementById('loginScreen').style.display='block';
+        },2500);
+    }
+};
 
-            const savedUser = localStorage.getItem('shikshaSetuUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                setTimeout(() => {
-                    document.getElementById('splashScreen').classList.add('hide');
-                    setTimeout(() => {
-                        document.getElementById('splashScreen').style.display = 'none';
-                        showDashboardDirect();
-                    }, 400);
-                }, 1800);
-            } else {
-                setTimeout(() => {
-                    document.getElementById('splashScreen').classList.add('hide');
-                    setTimeout(() => {
-                        document.getElementById('splashScreen').style.display = 'none';
-                        document.getElementById('loginScreen').style.display = 'block';
-                    }, 400);
-                }, 2500);
-            }
+// ========== API हेल्पर ==========
+async function api(action, params={}){
+    if(API_URL==",,,,,,,,"){ alert("कृपया API_URL में Client ID डालें!"); return {status:"error"}; }
+    let fd = new FormData();
+    fd.append('action', action);
+    for(let k in params) fd.append(k, params[k]);
+    try{
+        let r = await fetch(API_URL, {method:'POST', body:fd});
+        return await r.json();
+    } catch(e){
+        console.error(e);
+        return {status:"error", message:"नेटवर्क एरर"};
+    }
+}
+
+// ========== स्क्रीन स्विच ==========
+function goBack(){
+    document.getElementById('loginMain').style.display='block';
+    document.getElementById('phoneDiv').style.display='none';
+    document.getElementById('emailDiv').style.display='none';
+    document.getElementById('regDiv').style.display='none';
+}
+function showPhone(){
+    document.getElementById('loginMain').style.display='none';
+    document.getElementById('phoneDiv').style.display='block';
+}
+function showEmail(){
+    document.getElementById('loginMain').style.display='none';
+    document.getElementById('emailDiv').style.display='block';
+}
+function showRegister(){
+    document.getElementById('loginMain').style.display='none';
+    document.getElementById('regDiv').style.display='block';
+}
+
+// ========== OTP ==========
+function sendOTP(){
+    let ph = document.getElementById('phoneNum').value.trim();
+    if(ph.length<10){ alert("सही फ़ोन नंबर डालें!"); return; }
+    genOTP = Math.floor(100000+Math.random()*900000).toString();
+    alert("OTP: "+genOTP+" (डेमो)");
+    document.getElementById('otpVal').style.display='block';
+    document.getElementById('otpBtn').style.display='block';
+}
+async function verifyOTP(){
+    let otp = document.getElementById('otpVal').value.trim();
+    if(otp!==genOTP){ alert("गलत OTP!"); return; }
+    let ph = document.getElementById('phoneNum').value.trim();
+    let res = await api('login', {phone:ph, password:'otp'});
+    if(res.status=='success'){
+        saveAndGo(res);
+    } else {
+        alert("आप रजिस्टर्ड नहीं हैं। कृपया रजिस्टर करें।");
+        showRegister();
+    }
+}
+
+// ========== ईमेल लॉगिन ==========
+async function emailLogin(){
+    let em = document.getElementById('emailVal').value.trim();
+    let pw = document.getElementById('passVal').value.trim();
+    if(!em||!pw){ alert("सभी फील्ड भरें!"); return; }
+    let res = await api('login', {phone:em, password:pw});
+    if(res.status=='success') saveAndGo(res);
+    else alert(res.message||"लॉगिन फेल");
+}
+
+// ========== रजिस्टर ==========
+async function registerUser(){
+    let n = document.getElementById('regName').value.trim();
+    let p = document.getElementById('regPhone').value.trim();
+    let e = document.getElementById('regEmail').value.trim();
+    let pw = document.getElementById('regPass').value.trim();
+    if(!n||!p||!e||!pw){ alert("सभी फील्ड भरें!"); return; }
+    if(pw.length<6){ alert("पासवर्ड कम से कम 6 अक्षर का हो!"); return; }
+    let res = await api('register', {fullName:n, phone:p, email:e, password:pw, userClass:''});
+    if(res.status=='success'){ alert("रजिस्ट्रेशन सफल!"); saveAndGo(res); }
+    else alert(res.message||"रजिस्ट्रेशन फेल");
+}
+
+function saveAndGo(res){
+    currentUser = {userId:res.userId, fullName:res.fullName, userType:res.userType||'Free'};
+    localStorage.setItem('ssUser', JSON.stringify(currentUser));
+    openDashboard();
+}
+
+// ========== डैशबोर्ड ==========
+function openDashboard(){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    document.getElementById('welcomeMsg').innerHTML = 'नमस्ते, '+(currentUser?currentUser.fullName:'छात्र')+'! 🌟';
+}
+
+function logoutUser(){
+    if(confirm("लॉगआउट करें?")){
+        localStorage.removeItem('ssUser');
+        currentUser=null;
+        document.getElementById('dashboard').style.display='none';
+        document.getElementById('loginScreen').style.display='block';
+        goBack();
+    }
+}
+
+// ========== मोडल ==========
+function openModal(title, html){
+    document.getElementById('modalContent').innerHTML = '<span class="close" onclick="closeModal()">✖</span><h3>'+title+'</h3>'+html;
+    document.getElementById('modalOverlay').style.display='flex';
+}
+function closeModal(){
+    document.getElementById('modalOverlay').style.display='none';
+}
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+    if(e.target===this) closeModal();
+});
+
+// ========== माय लाइब्रेरी ==========
+function libraryHTML(){
+    return '<p id="libMsg">लोड हो रहा है...</p><div id="libCourses"></div><button class="btn btn-gold" onclick="loadLibrary()">🔄 रिफ्रेश करें</button>';
+}
+async function loadLibrary(){
+    document.getElementById('libMsg').innerText = 'लोड हो रहा है...';
+    let res = await api('getCourses');
+    if(res.status=='success' && res.courses){
+        let h = '';
+        res.courses.forEach(c=>{
+            h += '<div class="course-card"><b>'+c.courseName+'</b><br>👨‍🏫 '+c.teacher+' | 📚 '+c.totalLessons+' लेसन<br><span class="badge '+(c.type=='Free'?'badge-free':'badge-premium')+'">'+c.type+'</span></div>';
         });
+        document.getElementById('libCourses').innerHTML = h || '<p>कोई कोर्स नहीं मिला</p>';
+    } else {
+        document.getElementById('libMsg').innerText = 'लोड नहीं हो पाया';
+    }
+}
 
-        function changeQuote() {
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            const el = document.getElementById('motivationalQuote');
-            if (el) el.innerHTML = randomQuote;
-        }
+// ========== लाइव क्लास ==========
+function liveClassHTML(){
+    return '<p>🟢 <b>आज की लाइव क्लास:</b></p><p>शाम 6:00 बजे — गणित (रवि सर)</p><p>शाम 7:00 बजे — विज्ञान (प्रिया मैम)</p><button class="btn btn-gold" onclick="alert(\'लिंक जल्द ही आएगा\')">🔗 क्लास जॉइन करें</button>';
+}
 
+// ========== लाइव टेस्ट ==========
+function liveTestHTML(){
+    return '<p>📝 <b>आगामी टेस्ट:</b></p><p>28 जुलाई — गणित साप्ताहिक टेस्ट (30 मिनट)</p><p>1 अगस्त — अंग्रेज़ी मॉक टेस्ट (60 मिनट)</p>';
+}
 
+// ========== करंट अफेयर्स ==========
+async function loadCurrentAffairs(){
+    let res = await api('getCurrentAffairs');
+    let h = '<p>लोड हो रहा है...</p>';
+    if(res.status=='success' && res.currentAffairs){
+        h = res.currentAffairs.map(n=>'<div class="course-card"><b>'+n.title+'</b><br><small>'+n.date+' | '+n.category+'</small></div>').join('');
+    }
+    openModal('📰 करंट अफेयर्स', h);
+}
+
+// ========== डाउट सेशन ==========
+function doubtHTML(){
+    return '<p>अपना सवाल नीचे लिखें:</p><textarea id="doubtQ" style="width:100%;height:80px;border:1px solid #ddd;border-radius:8px;padding:8px;"></textarea><button class="btn btn-gold" onclick="submitDoubt()">📩 सवाल भेजें</button>';
+}
+async function submitDoubt(){
+    let q = document.getElementById('doubtQ').value.trim();
+    if(!q){ alert("सवाल लिखें!"); return; }
+    if(!currentUser){ alert("पहले लॉगिन करें!"); return; }
+    let res = await api('addDoubt', {userId:currentUser.userId, question:q});
+    alert(res.message||"सवाल भेज दिया गया!");
+    closeModal();
+}
+</script>
+</body>
+</html>
